@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pet Delivery - Assistente</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Nunito:wght@600;700;800&family=Yellowtail&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --body-bg: #eaf6ff;
+      --main-bg: #ffffff;
+      --text: #1b3a57;
+
+      --header-start: #38b6ff;
+      --header-end: #4fcbff;
+      --title: #ffc82d;
+
+      --messages-bg: #ffffff;
+
+      --user-bg: #e3f4ff;
+      --user-border: #cfe8f8;
+      --user-text: #1b3a57;
+
+      --agent-start: #1067aa;
+      --agent-end: #2f93d6;
+      --agent-text: #ffffff;
+
+      --input-bg: #ffffff;
+      --input-border: #bfe3fa;
+
+      --form-border: #d8ecfa;
+
+      --button-start: #ffd75e;
+      --button-end: #ffa75a;
+      --button-text: #ffffff;
+
+      --error-bg: #fde2e2;
+      --error-text: #8a1c1c;
+    }
+
+    body.dark {
+      --body-bg: #0b1722;
+      --main-bg: #111f2d;
+      --text: #dceeff;
+
+      --header-start: #0c4d7c;
+      --header-end: #176b9e;
+      --title: #ffd75e;
+
+      --messages-bg: #111f2d;
+
+      --user-bg: #1d3b52;
+      --user-border: #2c536c;
+      --user-text: #e5f5ff;
+
+      --agent-start: #0d5688;
+      --agent-end: #1974ad;
+      --agent-text: #ffffff;
+
+      --input-bg: #172b3b;
+      --input-border: #31546d;
+
+      --form-border: #263e51;
+
+      --button-start: #dcae28;
+      --button-end: #d77b31;
+      --button-text: #ffffff;
+
+      --error-bg: #4a2428;
+      --error-text: #ffb5b5;
+    }
+
+    body {
+      font-family: "Nunito", system-ui, sans-serif;
+      margin: 0;
+      background: var(--body-bg);
+      display: flex;
+      justify-content: center;
+      color: var(--text);
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    main {
+      width: 100%;
+      max-width: 720px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--main-bg);
+      transition: background 0.25s ease;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px 14px;
+      background: linear-gradient(
+        135deg,
+        var(--header-start),
+        var(--header-end)
+      );
+      position: relative;
+    }
+
+    header img {
+      height: 44px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-family: "Yellowtail", cursive;
+      font-weight: 400;
+      font-size: 2.4rem;
+      line-height: 1.1;
+      color: var(--title);
+    }
+
+    /* =========================================
+       SWITCH ESTILIZADO (AJUSTADO PARA O DARK)
+       ========================================= */
+    .theme-switch {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 88px;
+      height: 34px;
+      display: inline-block;
+    }
+
+    .theme-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #f0f0f0;
+      border-radius: 34px;
+      transition: background-color 0.3s ease;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    /* Textos LIGHT e DARK */
+    .slider .switch-text {
+      font-family: "Nunito", sans-serif;
+      font-weight: 800;
+      font-size: 0.82rem;
+      letter-spacing: 0.5px;
+      user-select: none;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .slider .text-light {
+      left: 12px;
+      color: #b0b0b0;
+    }
+
+    .slider .text-dark {
+      right: 12px;
+      color: #ffffff;
+      display: none;
+    }
+
+    /* Círculo deslizante branco */
+    .slider::before {
+      position: absolute;
+      content: "";
+      height: 28px;
+      width: 28px;
+      right: 3px;
+      top: 3px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      z-index: 1;
+    }
+
+    /* Ícones no centro do círculo */
+    .slider .icon {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      top: 8px;
+      z-index: 2;
+      transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+
+    .slider .icon-sun {
+      right: 8px;
+      fill: #8e8e8e;
+    }
+
+    .slider .icon-moon {
+      left: 8px;
+      fill: #2f363d;
+      opacity: 0;
+    }
+
+    /* =========================================
+       MODO ESCURO - REGRAS CORRIGIDAS
+       ========================================= */
+    body.dark .slider {
+      background-color: #383e45;
+    }
+
+    body.dark .slider .text-light {
+      display: none;
+    }
+
+    body.dark .slider .text-dark {
+      display: block;
+    }
+
+    /* Mover a bola e o ícone para a esquerda no DARK */
+    input:checked + .slider::before {
+      right: calc(100% - 31px);
+    }
+
+    body.dark .slider .icon-sun {
+      opacity: 0;
+    }
+
+    body.dark .slider .icon-moon {
+      opacity: 1;
+    }
+
+    #mensagens {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--messages-bg);
+      transition: background 0.25s ease;
+    }
+
+    .msg {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      line-height: 1.4;
+      font-weight: 600;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .usuario {
+      align-self: flex-end;
+      color: var(--user-text);
+      background: var(--user-bg);
+      border: 1px solid var(--user-border);
+    }
+
+    .agente {
+      align-self: flex-start;
+      color: var(--agent-text);
+      background: linear-gradient(
+        135deg,
+        var(--agent-start),
+        var(--agent-end)
+      );
+    }
+
+    .erro {
+      align-self: flex-start;
+      background: var(--error-bg);
+      color: var(--error-text);
+    }
+
+    #form {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--form-border);
+      background: var(--main-bg);
+      transition:
+        background 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    #texto {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 12px;
+
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+
+      background: var(--input-bg);
+      color: var(--text);
+
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease;
+    }
+
+    #texto::placeholder {
+      color: #7893a8;
+    }
+
+    body.dark #texto::placeholder {
+      color: #829bad;
+    }
+
+    #texto:focus {
+      outline: 2px solid #38b6ff;
+      border-color: transparent;
+    }
+
+    button[type="submit"] {
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 10px;
+
+      color: var(--button-text);
+      background: linear-gradient(
+        135deg,
+        var(--button-start),
+        var(--button-end)
+      );
+
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+
+      font-family: "Alfa Slab One", Georgia, serif;
+      font-size: 1.05rem;
+
+      cursor: pointer;
+    }
+
+    button[type="submit"]:disabled {
+      opacity: .5;
+      cursor: default;
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding-right: 100px;
+      }
+
+      header h1 {
+        font-size: 2.1rem;
+      }
+
+      .theme-switch {
+        right: 10px;
+      }
+
+      #mensagens {
+        padding: 14px;
+      }
+
+      .msg {
+        max-width: 88%;
+      }
+
+      #form {
+        padding: 10px;
+      }
+
+      button[type="submit"] {
+        padding: 10px 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<main>
+
+  <header>
+    <!-- Logo opcional: coloque o arquivo logo.png em app/static/ -->
+    <img
+      src="{{ url_for('static', filename='logo.png') }}"
+      alt=""
+      onerror="this.remove()"
+    >
+
+    <h1>Pet Delivery</h1>
+
+    <label
+      class="theme-switch"
+      aria-label="Alternar modo escuro"
+      title="Alternar modo escuro"
+    >
+      <input type="checkbox" id="tema">
+      <span class="slider">
+        <!-- Textos LIGHT / DARK -->
+        <span class="switch-text text-light">LIGHT</span>
+        <span class="switch-text text-dark">DARK</span>
+
+        <!-- Ícone do Sol (Modo Claro) -->
+        <svg class="icon icon-sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4" fill="none" stroke="#8e8e8e" stroke-width="2.5"></circle>
+          <line x1="12" y1="2" x2="12" y2="4" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="12" y1="20" x2="12" y2="22" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="2" y1="12" x2="4" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="20" y1="12" x2="22" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+          <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+        </svg>
+
+        <!-- Ícone da Lua com Estrelas (Modo Escuro) -->
+        <svg class="icon icon-moon" viewBox="0 0 24 24">
+          <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-7.54-7.54C12.92 3.04 12.46 3 12 3z"></path>
+          <polygon points="17,3 17.5,4.5 19,4.5 17.8,5.4 18.2,6.8 17,5.9 15.8,6.8 16.2,5.4 15,4.5 16.5,4.5"></polygon>
+          <polygon points="13,1 13.3,2 14.3,2 13.5,2.6 13.8,3.5 13,2.9 12.2,3.5 12.5,2.6 11.7,2 12.7,2"></polygon>
+        </svg>
+      </span>
+    </label>
+  </header>
+
+  <div id="mensagens"></div>
+
+  <form id="form">
+    <input
+      id="texto"
+      autocomplete="off"
+      placeholder="Digite sua mensagem..."
+      maxlength="1000"
+    >
+
+    <button id="enviar" type="submit">
+      Enviar
+    </button>
+  </form>
+
+</main>
+
+<script>
+  const lista = document.getElementById("mensagens");
+  const form = document.getElementById("form");
+  const campo = document.getElementById("texto");
+  const botao = document.getElementById("enviar");
+  const tema = document.getElementById("tema");
+
+  function adicionar(texto, classe) {
+    const div = document.createElement("div");
+
+    div.className = "msg " + classe;
+    div.textContent = texto;
+
+    lista.appendChild(div);
+    lista.scrollTop = lista.scrollHeight;
+  }
+
+  // ================================
+  // MODO ESCURO
+  // ================================
+
+  function aplicarTema(modo) {
+    const escuro = modo === "dark";
+
+    document.body.classList.toggle("dark", escuro);
+    tema.checked = escuro;
+
+    const label = tema.closest("label");
+    if (label) {
+      label.setAttribute(
+        "aria-label",
+        escuro ? "Ativar modo claro" : "Ativar modo escuro"
+      );
+      label.setAttribute(
+        "title",
+        escuro ? "Ativar modo claro" : "Ativar modo escuro"
+      );
+    }
+  }
+
+  tema.addEventListener("change", () => {
+    const novoTema = tema.checked ? "dark" : "light";
+
+    aplicarTema(novoTema);
+
+    localStorage.setItem("petDeliveryTema", novoTema);
+  });
+
+  // Recupera o tema salvo
+  const temaSalvo = localStorage.getItem("petDeliveryTema");
+
+  if (temaSalvo) {
+    aplicarTema(temaSalvo);
+  } else {
+    const prefereEscuro = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+
+    aplicarTema(prefereEscuro ? "dark" : "light");
+  }
+
+  // ================================
+  // CHAT
+  // ================================
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const texto = campo.value.trim();
+
+    if (!texto) return;
+
+    adicionar(texto, "usuario");
+
+    campo.value = "";
+    botao.disabled = true;
+
+    try {
+      const resp = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: texto
+        }),
+      });
+
+      const dados = await resp.json();
+
+      if (resp.ok) {
+        adicionar(dados.reply, "agente");
+      } else {
+        adicionar(
+          dados.error || "Erro inesperado.",
+          "erro"
+        );
+      }
+
+    } catch (err) {
+      adicionar(
+        "Não foi possível falar com o servidor.",
+        "erro"
+      );
+
+    } finally {
+      botao.disabled = false;
+      campo.focus();
+    }
+  });
+
+  adicionar(
+    "Olá! Sou o assistente do Pet Delivery. (Passo 1: por enquanto só repito o que você diz.)",
+    "agente"
+  );
+</script>
+
+</body>
+</html>
