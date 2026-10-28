@@ -77,7 +77,7 @@ def buscar_produtos(ctx, termo):
     ),
     parametros={
         "produto_id": {"tipo": "integer", "obrigatorio": True, "descricao": "Identificador do produto, obtido em buscar_produtos."},
-        "loja_id": {"tipo": "integer", "obrigatorio": False," descricao": "Opcional. Restringe a consulta a uma loja."},
+        "loja_id": {"tipo": "integer", "obrigatorio": False,"descricao": "Opcional. Restringe a consulta a uma loja."},
     },
 )
 def consultar_estoque(ctx, produto_id, loja_id=None):

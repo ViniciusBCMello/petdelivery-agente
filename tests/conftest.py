@@ -32,3 +32,11 @@ def achar_produto(ctx):
         assert ids, f"produto '{nome}' nao encontrado (rode scripts/popular_dados.py --reset)"
         return ids[0]
     return _achar
+
+
+@pytest.fixture()
+def como_cliente(ctx):
+    """Devolve um Contexto logado como o cliente pedido (simula a sessao de login)."""
+    def _como(cliente_id):
+        return Contexto(conn=ctx.conn, cliente_id=cliente_id)
+    return _como
