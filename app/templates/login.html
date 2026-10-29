@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#08243b">
+  <title>Pet Delivery - Entrar</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Nunito:wght@600;700;800&family=Yellowtail&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      color-scheme: dark;
+      --text: #f4f9ff;
+      --muted: #a9c9e7;
+      --card-bg: rgba(5, 31, 52, .78);
+      --card-border: rgba(72, 166, 230, .64);
+      --field-bg: rgba(17, 57, 85, .74);
+      --field-border: #669fce;
+      --field-text: #f7fbff;
+      --field-placeholder: #aac6e3;
+      --blue: #38b6ff;
+      --yellow: #ffd34e;
+      --orange: #ff954d;
+      --error-bg: #fde2e2;
+      --error-text: #8a1c1c;
+    }
+
+    html { min-height: 100%; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100svh;
+      font-family: "Nunito", system-ui, sans-serif;
+      color: var(--text);
+      background: #071b2d;
+    }
+
+    button, input { font: inherit; }
+    button { -webkit-tap-highlight-color: transparent; }
+
+    .layout {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(390px, .78fr);
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      background: #071b2d;
+    }
+
+    /* Área do formulário: o degradê cria o efeito de overlay da referência. */
+    .area-login {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+      padding: 48px clamp(22px, 5vw, 76px);
+      isolation: isolate;
+      background:
+        radial-gradient(ellipse at 10% 15%, rgba(28, 126, 190, .22), transparent 34%),
+        linear-gradient(135deg, #061a2b 0%, #082c49 55%, #0a3655 100%);
+    }
+
+    .area-login::before,
+    .area-login::after {
+      position: absolute;
+      z-index: -1;
+      content: "";
+      pointer-events: none;
+      border-radius: 50%;
+    }
+
+    .area-login::before {
+      width: 320px;
+      height: 320px;
+      left: -185px;
+      top: -155px;
+      border: 1px solid rgba(56, 182, 255, .15);
+      box-shadow: 0 0 0 32px rgba(56, 182, 255, .025), 0 0 0 66px rgba(56, 182, 255, .02);
+    }
+
+    .area-login::after {
+      width: 250px;
+      height: 250px;
+      right: -150px;
+      bottom: -135px;
+      background: rgba(56, 182, 255, .07);
+    }
+
+    .cartao {
+      width: min(100%, 455px);
+      padding: clamp(26px, 3.4vw, 42px);
+      color: var(--text);
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 25px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .06);
+      backdrop-filter: blur(19px);
+      -webkit-backdrop-filter: blur(19px);
+      animation: surgir .45s ease-out both;
+    }
+
+    .marca {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      min-height: 70px;
+    }
+
+    .marca img {
+      display: block;
+      width: min(225px, 82%);
+      max-height: 100px;
+      object-fit: contain;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.2vw, 1.8rem);
+      line-height: 1.25;
+      font-weight: 800;
+      letter-spacing: -.35px;
+    }
+
+    .subtitulo {
+      margin: 9px 0 25px;
+      color: var(--muted);
+      font-size: .98rem;
+      line-height: 1.5;
+    }
+
+    #erro {
+      display: none;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border: 1px solid #ffb7b7;
+      border-radius: 11px;
+      background: var(--error-bg);
+      color: var(--error-text);
+      font-size: .94rem;
+      font-weight: 800;
+      line-height: 1.4;
+    }
+
+    #erro.visivel { display: flex; }
+
+    #erro svg { flex: 0 0 19px; margin-top: 1px; }
+
+    #form-login {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+    }
+
+    .grupo-campo {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .grupo-campo > label {
+      font-size: .96rem;
+      font-weight: 800;
+    }
+
+    .campo-com-icone { position: relative; }
+
+    .icone-campo {
+      position: absolute;
+      top: 50%;
+      left: 15px;
+      width: 21px;
+      height: 21px;
+      color: #b3d7f4;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .campo-com-icone input {
+      display: block;
+      width: 100%;
+      min-height: 54px;
+      padding: 13px 48px 13px 47px;
+      border: 1px solid var(--field-border);
+      border-radius: 12px;
+      outline: none;
+      background: var(--field-bg);
+      color: var(--field-text);
+      font-size: 1rem;
+      font-weight: 700;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .campo-com-icone input::placeholder {
+      color: var(--field-placeholder);
+      opacity: 1;
+      font-weight: 600;
+    }
+
+    .campo-com-icone input:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(56, 182, 255, .18);
+    }
+
+    .mostrar-senha {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: #d3eaff;
+      cursor: pointer;
+      transform: translateY(-50%);
+    }
+
+    .mostrar-senha:hover { background: rgba(255, 255, 255, .09); }
+    .mostrar-senha:focus-visible, .alternar-tema:focus-visible, .entrar:focus-visible {
+      outline: 3px solid var(--blue);
+      outline-offset: 3px;
+    }
+
+    .mostrar-senha svg { width: 19px; height: 19px; }
+
+    .entrar {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 55px;
+      margin-top: 5px;
+      padding: 13px 18px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(120deg, var(--yellow), var(--orange));
+      color: #17344c;
+      font-family: "Alfa Slab One", Georgia, serif;
+      font-size: 1.1rem;
+      letter-spacing: .1px;
+      box-shadow: 0 8px 22px rgba(255, 166, 65, .2);
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease, opacity .15s ease;
+    }
+
+    .entrar:hover:not(:disabled) { filter: brightness(1.04); transform: translateY(-1px); }
+    .entrar:active:not(:disabled) { transform: translateY(0); }
+    .entrar:disabled { opacity: .65; cursor: wait; }
+
+    .nota {
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    /* Fotografia lateral dos pets. */
+    .visual {
+      position: relative;
+      min-width: 0;
+      min-height: 100%;
+      overflow: hidden;
+      background: #173955;
+    }
+
+    .visual img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 38%;
+      filter: brightness(.88) saturate(.94);
+      transform: scale(1.015);
+    }
+
+    .visual::before {
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(90deg, rgba(5, 25, 42, .35), transparent 27%),
+                  linear-gradient(0deg, rgba(5, 25, 42, .20), transparent 40%);
+    }
+
+    .alternar-tema {
+      position: absolute;
+      z-index: 5;
+      top: 22px;
+      right: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 8px 13px;
+      border: 1px solid rgba(220, 239, 255, .42);
+      border-radius: 999px;
+      background: rgba(4, 24, 41, .62);
+      color: #fff;
+      font-size: .83rem;
+      font-weight: 800;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+    }
+
+    .alternar-tema svg { width: 17px; height: 17px; }
+
+    /* Tema claro opcional, salvo no navegador. */
+    body.tema-claro { color-scheme: light; background: #eaf6ff; }
+
+    body.tema-claro .area-login {
+      background:
+        radial-gradient(ellipse at 10% 15%, rgba(56, 182, 255, .19), transparent 35%),
+        linear-gradient(135deg, #eaf6ff 0%, #d9efff 58%, #c8e8fb 100%);
+    }
+
+    body.tema-claro .cartao {
+      --text: #1b3a57;
+      --muted: #5b7690;
+      --card-bg: rgba(255, 255, 255, .88);
+      --card-border: rgba(56, 151, 207, .28);
+      --field-bg: rgba(255, 255, 255, .94);
+      --field-border: #bfe3fa;
+      --field-text: #1b3a57;
+      --field-placeholder: #7893a8;
+      color: var(--text);
+      box-shadow: 0 24px 70px rgba(27, 58, 87, .15);
+    }
+
+    body.tema-claro .icone-campo { color: #3976a5; }
+    body.tema-claro .mostrar-senha { color: #3976a5; }
+    body.tema-claro .mostrar-senha:hover { background: rgba(56, 182, 255, .1); }
+
+    body.tema-claro .alternar-tema {
+      border-color: rgba(27, 58, 87, .18);
+      background: rgba(255, 255, 255, .88);
+      color: #1b3a57;
+    }
+
+    @keyframes surgir {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr) minmax(300px, .72fr); }
+      .area-login { padding: 34px 24px; }
+      .cartao { padding: 28px 25px; }
+      .visual img { object-position: center 38%; }
+    }
+
+    @media (max-width: 680px) {
+      .layout { display: block; }
+      .visual { display: none; }
+      .area-login {
+        min-height: 100vh;
+        min-height: 100svh;
+        padding: 78px 18px 28px;
+        background-image: linear-gradient(rgba(4, 24, 42, .82), rgba(4, 24, 42, .9)),
+          url("{{ url_for('static', filename='pets-login.jpg') }}");
+        background-size: cover;
+        background-position: center;
+      }
+      body.tema-claro .area-login {
+        background-image: linear-gradient(rgba(234, 246, 255, .86), rgba(234, 246, 255, .92)),
+          url("{{ url_for('static', filename='pets-login.jpg') }}");
+      }
+      .cartao { width: min(100%, 450px); padding: 28px 23px; border-radius: 21px; }
+      .marca { margin-bottom: 20px; }
+      .marca img { width: min(205px, 80%); }
+      h1 { font-size: 1.5rem; }
+      .alternar-tema { top: 17px; right: 17px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="layout">
+    <section class="area-login" aria-labelledby="titulo-login">
+      <article class="cartao">
+        <div class="marca">
+          <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="Pet Delivery"
+            onerror="this.style.display='none'"
+          >
+        </div>
+
+        <h1 id="titulo-login">Entre para falar com o assistente</h1>
+        <p class="subtitulo">Acesse sua conta para continuar.</p>
+
+        <div id="erro" role="alert" aria-live="polite">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" fill="currentColor"></circle>
+            <path d="M12 7v6m0 4h.01" stroke="#fff" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+          <span id="mensagem-erro"></span>
+        </div>
+
+        <form id="form-login" novalidate>
+          <div class="grupo-campo">
+            <label for="email">E-mail</label>
+            <div class="campo-com-icone">
+              <svg class="icone-campo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="1.8"></circle>
+                <path d="M4 20c.5-3.4 3.5-5.5 8-5.5s7.5 2.1 8 5.5H4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+              </svg>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="seu@email.com"
+                autocomplete="username"
+                maxlength="200"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="grupo-campo">
+            <label for="senha">Senha</label>
+            <div class="campo-com-icone">
+              <svg class="icone-campo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3m-4 4v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              </svg>
+              <input
+                id="senha"
+                type="password"
+                name="senha"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                maxlength="200"
+                required
+              >
+              <button
+                class="mostrar-senha"
+                id="mostrar-senha"
+                type="button"
+                aria-label="Mostrar senha"
+                title="Mostrar senha"
+              >
+                <svg id="icone-senha" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                  <circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"></circle>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button class="entrar" id="entrar" type="submit">Entrar</button>
+        </form>
+
+        <p class="nota">Ambiente de demonstração com dados fictícios.</p>
+      </article>
+    </section>
+
+    <aside class="visual" aria-label="Imagem de um cachorro e um gato">
+      <img
+        src="{{ url_for('static', filename='pets-login.jpg') }}"
+        alt="Um cachorro golden retriever e um gato olhando para a câmera"
+        fetchpriority="high"
+      >
+    </aside>
+
+    <button class="alternar-tema" id="alternar-tema" type="button" aria-label="Ativar tema claro" title="Alternar tema">
+      <svg id="icone-tema" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"></circle>
+        <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+      </svg>
+      <span id="texto-tema">Modo claro</span>
+    </button>
+  </main>
+
+  <script>
+    const form = document.getElementById("form-login");
+    const campoEmail = document.getElementById("email");
+    const campoSenha = document.getElementById("senha");
+    const botaoEntrar = document.getElementById("entrar");
+    const caixaErro = document.getElementById("erro");
+    const mensagemErro = document.getElementById("mensagem-erro");
+    const botaoMostrarSenha = document.getElementById("mostrar-senha");
+    const iconeSenha = document.getElementById("icone-senha");
+    const botaoTema = document.getElementById("alternar-tema");
+    const textoTema = document.getElementById("texto-tema");
+    const iconeTema = document.getElementById("icone-tema");
+
+    function mostrarErro(texto) {
+      mensagemErro.textContent = texto;
+      caixaErro.classList.add("visivel");
+    }
+
+    function limparErro() {
+      caixaErro.classList.remove("visivel");
+      mensagemErro.textContent = "";
+    }
+
+    // Mostrar ou ocultar a senha sem alterar o valor digitado.
+    botaoMostrarSenha.addEventListener("click", () => {
+      const mostrar = campoSenha.type === "password";
+      campoSenha.type = mostrar ? "text" : "password";
+      botaoMostrarSenha.setAttribute("aria-label", mostrar ? "Ocultar senha" : "Mostrar senha");
+      botaoMostrarSenha.setAttribute("title", mostrar ? "Ocultar senha" : "Mostrar senha");
+
+      iconeSenha.innerHTML = mostrar
+        ? '<path d="M3 3l18 18M10.6 10.7a2 2 0 0 0 2.7 2.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M9.9 5.2A10.8 10.8 0 0 1 12 5c6.2 0 9.5 7 9.5 7a16 16 0 0 1-2.6 3.4M6.2 6.3C3.8 8 2.5 12 2.5 12s3.3 7 9.5 7c1 0 1.9-.2 2.7-.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>'
+        : '<path d="M2.5 12s3.3-6 9.5-6 9.5 6 9.5 6-3.3 6-9.5 6-9.5-6-9.5-6Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" stroke="currentColor" stroke-width="1.8"/>';
+    });
+
+    // Preferência de tema persistida no navegador.
+    function aplicarTema(claro) {
+      document.body.classList.toggle("tema-claro", claro);
+      textoTema.textContent = claro ? "Modo escuro" : "Modo claro";
+      botaoTema.setAttribute("aria-label", claro ? "Ativar tema escuro" : "Ativar tema claro");
+      iconeTema.innerHTML = claro
+        ? '<path d="M20.5 15.2A8.5 8.5 0 0 1 8.8 3.5 8.7 8.7 0 1 0 20.5 15.2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>'
+        : '<circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>';
+    }
+
+    let temaClaro = false;
+    try {
+      temaClaro = localStorage.getItem("petDeliveryLoginTema") === "claro";
+    } catch (e) {
+      // Se o armazenamento estiver bloqueado, a tela continua funcionando no tema escuro.
+    }
+    aplicarTema(temaClaro);
+
+    botaoTema.addEventListener("click", () => {
+      temaClaro = !document.body.classList.contains("tema-claro");
+      aplicarTema(temaClaro);
+      try {
+        localStorage.setItem("petDeliveryLoginTema", temaClaro ? "claro" : "escuro");
+      } catch (e) {
+        // A preferência só não será salva; a alternância continua funcionando nesta página.
+      }
+    });
+
+    // Mantém o endpoint e o formato de autenticação do login atual.
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      limparErro();
+
+      const email = campoEmail.value.trim();
+      const senha = campoSenha.value;
+
+      if (!email || !senha) {
+        mostrarErro("Informe e-mail e senha.");
+        (!email ? campoEmail : campoSenha).focus();
+        return;
+      }
+
+      botaoEntrar.disabled = true;
+      botaoEntrar.textContent = "Entrando...";
+
+      try {
+        const resp = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, senha })
+        });
+
+        const dados = await resp.json().catch(() => ({}));
+
+        if (resp.ok) {
+          window.location.href = "/";
+          return;
+        }
+
+        campoSenha.value = "";
+        mostrarErro(dados.error || "Não foi possível entrar.");
+        campoSenha.focus();
+      } catch (err) {
+        mostrarErro("Não foi possível falar com o servidor. Verifique sua conexão e tente novamente.");
+      } finally {
+        botaoEntrar.disabled = false;
+        botaoEntrar.textContent = "Entrar";
+      }
+    });
+
+    campoEmail.focus();
+  </script>
+</body>
+</html>

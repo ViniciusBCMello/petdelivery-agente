@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
   <title>Pet Delivery - Assistente</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,6 +19,12 @@
       --body-bg: #eaf6ff;
       --main-bg: #ffffff;
       --text: #1b3a57;
+      --muted: #67839b;
+
+      --sidebar-bg: #f3faff;
+      --sidebar-border: #d8ecfa;
+      --sidebar-hover: #e3f4ff;
+      --sidebar-active: #d8efff;
 
       --header-start: #38b6ff;
       --header-end: #4fcbff;
@@ -35,7 +42,6 @@
 
       --input-bg: #ffffff;
       --input-border: #bfe3fa;
-
       --form-border: #d8ecfa;
 
       --button-start: #ffd75e;
@@ -44,12 +50,21 @@
 
       --error-bg: #fde2e2;
       --error-text: #8a1c1c;
+
+      --profile-card-bg: #ffffff;
+      --shadow: 0 10px 28px rgba(27, 58, 87, .12);
     }
 
     body.dark {
       --body-bg: #0b1722;
       --main-bg: #111f2d;
       --text: #dceeff;
+      --muted: #9ab5ca;
+
+      --sidebar-bg: #0e1b28;
+      --sidebar-border: #263e51;
+      --sidebar-hover: #172d40;
+      --sidebar-active: #1b3950;
 
       --header-start: #0c4d7c;
       --header-end: #176b9e;
@@ -67,7 +82,6 @@
 
       --input-bg: #172b3b;
       --input-border: #31546d;
-
       --form-border: #263e51;
 
       --button-start: #dcae28;
@@ -76,195 +90,562 @@
 
       --error-bg: #4a2428;
       --error-text: #ffb5b5;
+
+      --profile-card-bg: #14283a;
+      --shadow: 0 10px 28px rgba(0, 0, 0, .25);
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
     }
 
     body {
-      font-family: "Nunito", system-ui, sans-serif;
       margin: 0;
-      background: var(--body-bg);
+      min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
-      justify-content: center;
+      overflow: hidden;
       color: var(--text);
-      transition: background 0.25s ease, color 0.25s ease;
+      background: var(--body-bg);
+      font-family: "Nunito", system-ui, sans-serif;
+      transition: background .25s ease, color .25s ease;
     }
 
-    main {
-      width: 100%;
-      max-width: 720px;
-      height: 100vh;
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid #38b6ff;
+      outline-offset: 2px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    /* =========================================
+       BARRA LATERAL
+       ========================================= */
+
+    .sidebar {
+      position: relative;
+      z-index: 30;
+      display: flex;
+      flex: 0 0 264px;
+      flex-direction: column;
+      width: 264px;
+      min-width: 0;
+      padding: 18px 12px 12px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
+      transition:
+        background .25s ease,
+        border-color .25s ease,
+        transform .25s ease;
+    }
+
+    .sidebar-top {
       display: flex;
       flex-direction: column;
-      background: var(--main-bg);
-      transition: background 0.25s ease;
+      gap: 22px;
     }
 
-    header {
+    /* Marca lateral original: logo + título Yellowtail amarelo */
+
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 9px;
+      padding: 2px 8px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
+    .brand h1 {
+      margin: 0;
+      color: var(--title);
+      font-family: "Yellowtail", cursive;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+
+    .nav-button {
+      width: 100%;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 12px;
+      color: var(--text);
+      background: transparent;
+      text-align: left;
+      font-size: .96rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition:
+        background .18s ease,
+        border-color .18s ease,
+        transform .18s ease;
+    }
+
+    .nav-button:hover {
+      background: var(--sidebar-hover);
+    }
+
+    .nav-button:active {
+      transform: scale(.99);
+    }
+
+    .nav-button.primary {
+      color: #ffffff;
+      background: linear-gradient(135deg, #168fd4, #2f93d6);
+      box-shadow: 0 4px 10px rgba(22, 143, 212, .18);
+    }
+
+    .nav-button.primary:hover {
+      filter: brightness(1.04);
+    }
+
+    .nav-button .nav-icon {
+      width: 20px;
+      height: 20px;
+      flex: 0 0 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sidebar-section {
+      margin-top: 22px;
+      min-height: 0;
+    }
+
+    .section-label {
+      display: block;
+      margin: 0 10px 8px;
+      color: var(--muted);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .current-conversation {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid transparent;
+      border-radius: 10px;
+      color: var(--text);
+      background: var(--sidebar-active);
+      text-align: left;
+      font-size: .88rem;
+      font-weight: 700;
+      overflow: hidden;
+    }
+
+    .current-conversation .conversation-name {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .current-conversation svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sidebar-spacer {
+      flex: 1;
+      min-height: 28px;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      margin: 8px 4px 10px;
+      background: var(--sidebar-border);
+    }
+
+    .sidebar-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .profile-button {
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #ffffff;
+      background: linear-gradient(135deg, #148bd0, #2759a8);
+      font-size: .83rem;
+      font-weight: 800;
+    }
+
+    .profile-copy {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .profile-copy strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: .88rem;
+    }
+
+    .profile-copy small {
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 700;
+    }
+
+    .profile-chevron {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 16px;
+      opacity: .7;
+    }
+
+    .profile-panel {
+      margin: 2px 4px 8px;
+      padding: 13px;
+      border: 1px solid var(--sidebar-border);
+      border-radius: 12px;
+      background: var(--profile-card-bg);
+      box-shadow: var(--shadow);
+      overflow-wrap: anywhere;
+    }
+
+    .profile-panel strong {
+      display: block;
+      font-size: .9rem;
+    }
+
+    .profile-panel p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    .logout-button {
+      color: #bc3e3e;
+    }
+
+    body.dark .logout-button {
+      color: #ffaaaa;
+    }
+
+    .logout-button:hover {
+      background: var(--error-bg);
+    }
+
+    .logout-button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    /* =========================================
+       ÁREA PRINCIPAL DO CHAT
+       ========================================= */
+
+    .workspace {
+      width: calc(100% - 264px);
+      min-width: 0;
+      height: 100vh;
+      height: 100dvh;
+      display: flex;
+      flex: 1 1 auto;
+      flex-direction: column;
+      background: var(--main-bg);
+      transition: background .25s ease;
+    }
+
+    .topbar {
+      position: relative;
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 22px;
+      border-bottom: 1px solid var(--form-border);
+      background: var(--main-bg);
+      transition:
+        background .25s ease,
+        border-color .25s ease;
+    }
+
+    .topbar-title {
+      min-width: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /*
+      Marca central do cabeçalho.
+      Diferente da barra lateral, usa texto comum em Nunito
+      e a cor normal do texto, sem Yellowtail ou amarelo.
+    */
+
+    .topbar-brand {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: max-content;
+      max-width: calc(100% - 210px);
+      text-align: center;
+    }
+
+    .brand-lockup {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 12px 18px 14px;
-      background: linear-gradient(
-        135deg,
-        var(--header-start),
-        var(--header-end)
-      );
-      position: relative;
+      min-width: 0;
     }
 
-    header img {
-      height: 44px;
+    .brand-lockup img {
+      display: block;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 42px;
+      object-fit: contain;
     }
 
-    header h1 {
+    .brand-lockup h2 {
       margin: 0;
-      font-family: "Yellowtail", cursive;
-      font-weight: 400;
-      font-size: 2.4rem;
-      line-height: 1.1;
-      color: var(--title);
+      color: var(--text);
+      font-family: "Nunito", system-ui, sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .topbar-brand p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 40px;
+      height: 40px;
+      flex: 0 0 40px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--input-border);
+      border-radius: 10px;
+      color: var(--text);
+      background: var(--input-bg);
+      cursor: pointer;
+    }
+
+    .menu-toggle svg {
+      width: 21px;
+      height: 21px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
     }
 
     /* =========================================
-       SWITCH ESTILIZADO (AJUSTADO PARA O DARK)
+       ALTERNADOR DE TEMA
        ========================================= */
+
     .theme-switch {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
+      position: relative;
+      z-index: 2;
+      display: inline-block;
+      flex: 0 0 88px;
       width: 88px;
       height: 34px;
-      display: inline-block;
     }
 
     .theme-switch input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
       opacity: 0;
-      width: 0;
-      height: 0;
+    }
+
+    .theme-switch input:focus-visible + .slider {
+      outline: 2px solid #38b6ff;
+      outline-offset: 3px;
     }
 
     .slider {
       position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #f0f0f0;
-      border-radius: 34px;
-      transition: background-color 0.3s ease;
+      inset: 0;
       display: flex;
       align-items: center;
       padding: 0 10px;
       overflow: hidden;
-      box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 34px;
+      background: #f0f0f0;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, .1);
+      cursor: pointer;
+      transition: background .3s ease;
     }
 
-    /* Textos LIGHT e DARK */
-    .slider .switch-text {
-      font-family: "Nunito", sans-serif;
-      font-weight: 800;
-      font-size: 0.82rem;
-      letter-spacing: 0.5px;
-      user-select: none;
+    .switch-text {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
+      font-size: .75rem;
+      font-weight: 800;
+      letter-spacing: .4px;
+      user-select: none;
     }
 
-    .slider .text-light {
-      left: 12px;
-      color: #b0b0b0;
+    .text-light {
+      left: 10px;
+      color: #777;
     }
 
-    .slider .text-dark {
-      right: 12px;
-      color: #ffffff;
+    .text-dark {
+      right: 10px;
       display: none;
+      color: #ffffff;
     }
 
-    /* Círculo deslizante branco */
     .slider::before {
-      position: absolute;
       content: "";
-      height: 28px;
-      width: 28px;
-      right: 3px;
+      position: absolute;
       top: 3px;
-      background-color: #ffffff;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      right: 3px;
       z-index: 1;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .15);
+      transition: right .3s ease;
     }
 
-    /* Ícones no centro do círculo */
     .slider .icon {
       position: absolute;
-      width: 18px;
-      height: 18px;
       top: 8px;
       z-index: 2;
-      transition: opacity 0.25s ease;
+      width: 18px;
+      height: 18px;
       pointer-events: none;
+      transition: opacity .25s ease;
     }
 
-    .slider .icon-sun {
+    .icon-sun {
       right: 8px;
-      fill: #8e8e8e;
-    }
-
-    .slider .icon-moon {
-      left: 8px;
-      fill: #2f363d;
-      opacity: 0;
-    }
-
-    /* =========================================
-       MODO ESCURO - REGRAS CORRIGIDAS
-       ========================================= */
-    body.dark .slider {
-      background-color: #383e45;
-    }
-
-    body.dark .slider .text-light {
-      display: none;
-    }
-
-    body.dark .slider .text-dark {
-      display: block;
-    }
-
-    /* Mover a bola e o ícone para a esquerda no DARK */
-    input:checked + .slider::before {
-      right: calc(100% - 31px);
-    }
-
-    body.dark .slider .icon-sun {
-      opacity: 0;
-    }
-
-    body.dark .slider .icon-moon {
       opacity: 1;
     }
 
+    .icon-moon {
+      left: 8px;
+      opacity: 0;
+      fill: #2f363d;
+    }
+
+    body.dark .slider {
+      background: #383e45;
+    }
+
+    body.dark .text-light {
+      display: none;
+    }
+
+    body.dark .text-dark {
+      display: block;
+    }
+
+    .theme-switch input:checked + .slider::before {
+      right: calc(100% - 31px);
+    }
+
+    body.dark .icon-sun {
+      opacity: 0;
+    }
+
+    body.dark .icon-moon {
+      opacity: 1;
+    }
+
+    /* =========================================
+       MENSAGENS
+       ========================================= */
+
     #mensagens {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
-      padding: 18px;
+      padding: 24px clamp(16px, 4vw, 54px);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       background: var(--messages-bg);
-      transition: background 0.25s ease;
+      transition: background .25s ease;
+      scroll-behavior: smooth;
     }
 
     .msg {
-      max-width: 80%;
-      padding: 10px 14px;
-      border-radius: 14px;
-      line-height: 1.4;
+      max-width: min(78%, 760px);
+      padding: 11px 15px;
+      border-radius: 15px;
+      line-height: 1.5;
+      font-size: .97rem;
       font-weight: 600;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
@@ -275,6 +656,7 @@
       color: var(--user-text);
       background: var(--user-bg);
       border: 1px solid var(--user-border);
+      border-bottom-right-radius: 5px;
     }
 
     .agente {
@@ -285,44 +667,54 @@
         var(--agent-start),
         var(--agent-end)
       );
+      border-bottom-left-radius: 5px;
     }
 
     .erro {
       align-self: flex-start;
-      background: var(--error-bg);
       color: var(--error-text);
+      background: var(--error-bg);
+      border: 1px solid transparent;
+    }
+
+    /* =========================================
+       CAMPO DE ENVIO
+       ========================================= */
+
+    .composer-wrap {
+      padding: 14px clamp(14px, 4vw, 54px) 18px;
+      background: var(--main-bg);
+      border-top: 1px solid var(--form-border);
+      transition:
+        background .25s ease,
+        border-color .25s ease;
     }
 
     #form {
       display: flex;
-      gap: 8px;
-      padding: 12px;
-      border-top: 1px solid var(--form-border);
-      background: var(--main-bg);
-      transition:
-        background 0.25s ease,
-        border-color 0.25s ease;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     #texto {
       flex: 1;
       min-width: 0;
-      padding: 10px 12px;
-
+      min-height: 48px;
+      padding: 12px 15px;
       border: 1px solid var(--input-border);
-      border-radius: 10px;
-
+      border-radius: 14px;
       background: var(--input-bg);
       color: var(--text);
-
       font-family: inherit;
       font-size: 1rem;
       font-weight: 600;
-
       transition:
-        background 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease;
+        background .25s ease,
+        color .25s ease,
+        border-color .25s ease;
     }
 
     #texto::placeholder {
@@ -338,58 +730,206 @@
       border-color: transparent;
     }
 
-    button[type="submit"] {
-      padding: 10px 18px;
+    #enviar {
+      min-height: 48px;
+      padding: 10px 19px;
       border: 0;
-      border-radius: 10px;
-
+      border-radius: 12px;
       color: var(--button-text);
       background: linear-gradient(
         135deg,
         var(--button-start),
         var(--button-end)
       );
-
-      text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
-
+      text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
       font-family: "Alfa Slab One", Georgia, serif;
-      font-size: 1.05rem;
-
+      font-size: 1rem;
       cursor: pointer;
+      transition: filter .2s ease, opacity .2s ease;
     }
 
-    button[type="submit"]:disabled {
-      opacity: .5;
-      cursor: default;
+    #enviar:hover:not(:disabled) {
+      filter: brightness(1.04);
     }
 
-    @media (max-width: 480px) {
-      header {
-        padding-right: 100px;
+    #enviar:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .disclaimer {
+      margin: 9px auto 0;
+      color: var(--muted);
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 600;
+    }
+
+    .sidebar-backdrop {
+      display: none;
+    }
+
+    /* =========================================
+       TELAS GRANDES
+       ========================================= */
+
+    @media (min-width: 1200px) {
+      .sidebar {
+        flex-basis: 280px;
+        width: 280px;
       }
 
-      header h1 {
-        font-size: 2.1rem;
+      .workspace {
+        width: calc(100% - 280px);
+      }
+    }
+
+    /* =========================================
+       TABLETS E CELULARES
+       ========================================= */
+
+    @media (max-width: 760px) {
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(290px, 86vw);
+        height: 100dvh;
+        transform: translateX(-105%);
+        box-shadow: none;
       }
 
-      .theme-switch {
-        right: 10px;
+      body.sidebar-open .sidebar {
+        transform: translateX(0);
+        box-shadow: var(--shadow);
+      }
+
+      .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: block;
+        border: 0;
+        background: rgba(4, 15, 26, .45);
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .2s ease, visibility .2s ease;
+      }
+
+      body.sidebar-open .sidebar-backdrop {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .workspace {
+        width: 100%;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .topbar {
+        min-height: 76px;
+        padding: 9px 12px;
+      }
+
+      .topbar-brand {
+        max-width: calc(100% - 190px);
+      }
+
+      .brand-lockup {
+        gap: 7px;
+      }
+
+      .brand-lockup img {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+      }
+
+      .brand-lockup h2 {
+        font-size: 1.12rem;
+      }
+
+      .topbar-brand p {
+        font-size: .72rem;
+      }
+
+      .topbar-title {
+        gap: 9px;
       }
 
       #mensagens {
-        padding: 14px;
+        padding: 16px 12px;
       }
 
       .msg {
-        max-width: 88%;
+        max-width: 90%;
+      }
+
+      .composer-wrap {
+        padding: 10px 10px 12px;
       }
 
       #form {
-        padding: 10px;
+        gap: 7px;
       }
 
-      button[type="submit"] {
+      #texto {
+        min-height: 46px;
+        padding: 11px 12px;
+      }
+
+      #enviar {
+        min-height: 46px;
         padding: 10px 14px;
+      }
+
+      .disclaimer {
+        font-size: .68rem;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .theme-switch {
+        transform: scale(.84);
+        transform-origin: right center;
+      }
+
+      .topbar-brand {
+        max-width: calc(100% - 155px);
+      }
+
+      .brand-lockup {
+        gap: 4px;
+      }
+
+      .brand-lockup img {
+        width: 28px;
+        height: 28px;
+        flex-basis: 28px;
+      }
+
+      .brand-lockup h2 {
+        font-size: .96rem;
+      }
+
+      .topbar-brand p {
+        display: none;
+      }
+
+      #enviar {
+        padding: 10px 11px;
+        font-size: .92rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
@@ -397,185 +937,462 @@
 
 <body>
 
-<main>
+  <aside class="sidebar" id="sidebar" aria-label="Menu principal">
 
-  <header>
-    <!-- Logo opcional: coloque o arquivo logo.png em app/static/ -->
-    <img
-      src="{{ url_for('static', filename='logo.png') }}"
-      alt=""
-      onerror="this.remove()"
-    >
+    <div class="sidebar-top">
 
-    <h1>Pet Delivery</h1>
+      <!-- MARCA ORIGINAL NA BARRA LATERAL -->
+      <div class="brand">
+        <h1>Pet Delivery</h1>
+      </div>
 
-    <label
-      class="theme-switch"
-      aria-label="Alternar modo escuro"
-      title="Alternar modo escuro"
-    >
-      <input type="checkbox" id="tema">
-      <span class="slider">
-        <!-- Textos LIGHT / DARK -->
-        <span class="switch-text text-light">LIGHT</span>
-        <span class="switch-text text-dark">DARK</span>
-
-        <!-- Ícone do Sol (Modo Claro) -->
-        <svg class="icon icon-sun" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="4" fill="none" stroke="#8e8e8e" stroke-width="2.5"></circle>
-          <line x1="12" y1="2" x2="12" y2="4" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="12" y1="20" x2="12" y2="22" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="2" y1="12" x2="4" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="20" y1="12" x2="22" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
-          <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"></line>
+      <button class="nav-button primary" id="nova-conversa" type="button">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 5v14M5 12h14"/>
         </svg>
+        <span>Nova conversa</span>
+      </button>
 
-        <!-- Ícone da Lua com Estrelas (Modo Escuro) -->
-        <svg class="icon icon-moon" viewBox="0 0 24 24">
-          <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-7.54-7.54C12.92 3.04 12.46 3 12 3z"></path>
-          <polygon points="17,3 17.5,4.5 19,4.5 17.8,5.4 18.2,6.8 17,5.9 15.8,6.8 16.2,5.4 15,4.5 16.5,4.5"></polygon>
-          <polygon points="13,1 13.3,2 14.3,2 13.5,2.6 13.8,3.5 13,2.9 12.2,3.5 12.5,2.6 11.7,2 12.7,2"></polygon>
+      <div class="sidebar-section">
+        <span class="section-label">Conversas</span>
+
+        <div class="current-conversation" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-6.5A7.5 7.5 0 1 1 20 11.5Z"/>
+            <path d="M8 10h8M8 13h5"/>
+          </svg>
+          <span class="conversation-name" id="titulo-conversa">Conversa atual</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="sidebar-spacer"></div>
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-bottom">
+
+      <button
+        class="nav-button profile-button"
+        id="perfil"
+        type="button"
+        aria-expanded="false"
+        aria-controls="perfil-painel"
+      >
+        <span class="avatar" id="avatar-usuario" aria-hidden="true">PD</span>
+
+        <span class="profile-copy">
+          <strong id="nome-sidebar">{{ nome }}</strong>
+          <small>Perfil</small>
+        </span>
+
+        <svg
+          class="profile-chevron"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          aria-hidden="true"
+        >
+          <path d="m7 10 5 5 5-5"/>
         </svg>
-      </span>
-    </label>
-  </header>
+      </button>
 
-  <div id="mensagens"></div>
+      <div class="profile-panel" id="perfil-painel" hidden>
+        <strong>{{ nome }}</strong>
+        <p>Conta conectada ao Pet Delivery.</p>
+      </div>
 
-  <form id="form">
-    <input
-      id="texto"
-      autocomplete="off"
-      placeholder="Digite sua mensagem..."
-      maxlength="1000"
-    >
+      <button class="nav-button logout-button" id="sair" type="button">
+        <svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M10 17l5-5-5-5M15 12H3"/>
+          <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
+        </svg>
+        <span>Sair</span>
+      </button>
 
-    <button id="enviar" type="submit">
-      Enviar
-    </button>
-  </form>
+    </div>
+  </aside>
 
-</main>
+  <button
+    class="sidebar-backdrop"
+    id="sidebar-backdrop"
+    type="button"
+    aria-label="Fechar menu lateral"
+  ></button>
 
-<script>
-  const lista = document.getElementById("mensagens");
-  const form = document.getElementById("form");
-  const campo = document.getElementById("texto");
-  const botao = document.getElementById("enviar");
-  const tema = document.getElementById("tema");
+  <main class="workspace">
 
-  function adicionar(texto, classe) {
-    const div = document.createElement("div");
+    <header class="topbar">
 
-    div.className = "msg " + classe;
-    div.textContent = texto;
+      <!-- Botão do menu lateral para telas pequenas -->
+      <div class="topbar-title">
+        <button
+          class="menu-toggle"
+          id="abrir-menu"
+          type="button"
+          aria-label="Abrir menu lateral"
+          aria-controls="sidebar"
+          aria-expanded="false"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
 
-    lista.appendChild(div);
-    lista.scrollTop = lista.scrollHeight;
-  }
+      <!-- LOGO + TEXTO NORMAL, CENTRALIZADOS NO CABEÇALHO -->
+      <div class="topbar-brand">
+        <div class="brand-lockup">
+          <img
+            src="{{ url_for('static', filename='logo.png') }}"
+            alt="Logo Pet Delivery"
+            onerror="this.style.display='none'"
+          >
+          <h2>Pet Delivery</h2>
+        </div>
+        <p>Seu assistente pet, sempre por perto.</p>
+      </div>
 
-  // ================================
-  // MODO ESCURO
-  // ================================
+      <!-- Alternador de tema claro/escuro -->
+      <label
+        class="theme-switch"
+        aria-label="Alternar modo escuro"
+        title="Alternar modo escuro"
+      >
+        <input
+          type="checkbox"
+          id="tema"
+          aria-label="Alternar tema claro e escuro"
+        >
 
-  function aplicarTema(modo) {
-    const escuro = modo === "dark";
+        <span class="slider" aria-hidden="true">
+          <span class="switch-text text-light">LIGHT</span>
+          <span class="switch-text text-dark">DARK</span>
 
-    document.body.classList.toggle("dark", escuro);
-    tema.checked = escuro;
+          <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="4" stroke="#8e8e8e" stroke-width="2.5"/>
+            <line x1="12" y1="2" x2="12" y2="4" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="12" y1="20" x2="12" y2="22" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="4.93" y1="4.93" x2="6.34" y2="6.34" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="17.66" y1="17.66" x2="19.07" y2="19.07" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="2" y1="12" x2="4" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="20" y1="12" x2="22" y2="12" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="4.93" y1="19.07" x2="6.34" y2="17.66" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="17.66" y1="6.34" x2="19.07" y2="4.93" stroke="#8e8e8e" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
 
-    const label = tema.closest("label");
-    if (label) {
-      label.setAttribute(
-        "aria-label",
-        escuro ? "Ativar modo claro" : "Ativar modo escuro"
-      );
-      label.setAttribute(
-        "title",
-        escuro ? "Ativar modo claro" : "Ativar modo escuro"
+          <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.5 5.5 0 0 1-7.54-7.54C12.92 3.04 12.46 3 12 3z"/>
+            <polygon points="17,3 17.5,4.5 19,4.5 17.8,5.4 18.2,6.8 17,5.9 15.8,6.8 16.2,5.4 15,4.5 16.5,4.5"/>
+            <polygon points="13,1 13.3,2 14.3,2 13.5,2.6 13.8,3.5 13,2.9 12.2,3.5 12.5,2.6 11.7,2 12.7,2"/>
+          </svg>
+        </span>
+      </label>
+
+    </header>
+
+    <div
+      id="mensagens"
+      aria-live="polite"
+      aria-label="Conversa com o assistente"
+    ></div>
+
+    <div class="composer-wrap">
+      <form id="form">
+        <input
+          id="texto"
+          autocomplete="off"
+          placeholder="Digite sua mensagem..."
+          maxlength="1000"
+          aria-label="Digite sua mensagem"
+        >
+
+        <button id="enviar" type="submit">Enviar</button>
+      </form>
+
+      <p class="disclaimer">
+        O Pet Delivery pode cometer erros. Confira informações importantes.
+      </p>
+    </div>
+
+  </main>
+
+  <script>
+    "use strict";
+
+    const NOME = {{ nome|tojson }};
+
+    const lista = document.getElementById("mensagens");
+    const form = document.getElementById("form");
+    const campo = document.getElementById("texto");
+    const botao = document.getElementById("enviar");
+    const tema = document.getElementById("tema");
+
+    const botaoSair = document.getElementById("sair");
+    const botaoNovaConversa = document.getElementById("nova-conversa");
+    const botaoPerfil = document.getElementById("perfil");
+    const painelPerfil = document.getElementById("perfil-painel");
+
+    const botaoMenu = document.getElementById("abrir-menu");
+    const fundoMenu = document.getElementById("sidebar-backdrop");
+    const tituloConversa = document.getElementById("titulo-conversa");
+
+    function adicionar(texto, classe) {
+      const div = document.createElement("div");
+
+      div.className = "msg " + classe;
+      div.textContent = String(texto ?? "");
+
+      lista.appendChild(div);
+      lista.scrollTop = lista.scrollHeight;
+    }
+
+    function saudacao() {
+      adicionar(
+        "Olá, " + (NOME || "usuário") +
+        "! Sou o Peteco, assistente do Pet Delivery. Como posso ajudar?",
+        "agente"
       );
     }
-  }
 
-  tema.addEventListener("change", () => {
-    const novoTema = tema.checked ? "dark" : "light";
+    // =========================================
+    // TEMA CLARO/ESCURO
+    // =========================================
 
-    aplicarTema(novoTema);
+    function aplicarTema(modo) {
+      const escuro = modo === "dark";
 
-    localStorage.setItem("petDeliveryTema", novoTema);
-  });
+      document.body.classList.toggle("dark", escuro);
+      tema.checked = escuro;
 
-  // Recupera o tema salvo
-  const temaSalvo = localStorage.getItem("petDeliveryTema");
+      const label = tema.closest("label");
 
-  if (temaSalvo) {
-    aplicarTema(temaSalvo);
-  } else {
-    const prefereEscuro = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
+      if (label) {
+        const descricao = escuro
+          ? "Ativar modo claro"
+          : "Ativar modo escuro";
 
-    aplicarTema(prefereEscuro ? "dark" : "light");
-  }
+        label.setAttribute("aria-label", descricao);
+        label.setAttribute("title", descricao);
+      }
+    }
 
-  // ================================
-  // CHAT
-  // ================================
+    tema.addEventListener("change", () => {
+      const novoTema = tema.checked ? "dark" : "light";
 
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+      aplicarTema(novoTema);
 
-    const texto = campo.value.trim();
-
-    if (!texto) return;
-
-    adicionar(texto, "usuario");
-
-    campo.value = "";
-    botao.disabled = true;
+      try {
+        localStorage.setItem("petDeliveryTema", novoTema);
+      } catch (err) {
+        // O tema continua funcionando sem armazenamento local.
+      }
+    });
 
     try {
-      const resp = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: texto
-        }),
-      });
+      const temaSalvo = localStorage.getItem("petDeliveryTema");
 
-      const dados = await resp.json();
-
-      if (resp.ok) {
-        adicionar(dados.reply, "agente");
+      if (temaSalvo === "dark" || temaSalvo === "light") {
+        aplicarTema(temaSalvo);
       } else {
-        adicionar(
-          dados.error || "Erro inesperado.",
-          "erro"
-        );
+        const prefereEscuro = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        aplicarTema(prefereEscuro ? "dark" : "light");
+      }
+    } catch (err) {
+      aplicarTema("light");
+    }
+
+    // =========================================
+    // AVATAR DO USUÁRIO
+    // =========================================
+
+    const nomeNormalizado = String(NOME || "Pet Delivery").trim();
+    const partesNome = nomeNormalizado.split(/\s+/).filter(Boolean);
+
+    const iniciais = partesNome.length > 1
+      ? partesNome[0].charAt(0) +
+        partesNome[partesNome.length - 1].charAt(0)
+      : nomeNormalizado.slice(0, 2);
+
+    document.getElementById("avatar-usuario").textContent =
+      iniciais.toLocaleUpperCase("pt-BR");
+
+    // =========================================
+    // PERFIL
+    // =========================================
+
+    botaoPerfil.addEventListener("click", () => {
+      const vaiAbrir = painelPerfil.hidden;
+
+      painelPerfil.hidden = !vaiAbrir;
+
+      botaoPerfil.setAttribute(
+        "aria-expanded",
+        String(vaiAbrir)
+      );
+    });
+
+    // =========================================
+    // MENU LATERAL RESPONSIVO
+    // =========================================
+
+    function definirMenuAberto(aberto) {
+      document.body.classList.toggle("sidebar-open", aberto);
+
+      botaoMenu.setAttribute("aria-expanded", String(aberto));
+
+      botaoMenu.setAttribute(
+        "aria-label",
+        aberto ? "Fechar menu lateral" : "Abrir menu lateral"
+      );
+    }
+
+    botaoMenu.addEventListener("click", () => {
+      const aberto = document.body.classList.contains("sidebar-open");
+      definirMenuAberto(!aberto);
+    });
+
+    fundoMenu.addEventListener("click", () => {
+      definirMenuAberto(false);
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        definirMenuAberto(false);
+
+        painelPerfil.hidden = true;
+
+        botaoPerfil.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    document.querySelectorAll(".sidebar .nav-button").forEach((botaoLateral) => {
+      botaoLateral.addEventListener("click", () => {
+        if (
+          window.matchMedia("(max-width: 760px)").matches &&
+          botaoLateral.id !== "perfil"
+        ) {
+          definirMenuAberto(false);
+        }
+      });
+    });
+
+    // =========================================
+    // NOVA CONVERSA
+    // =========================================
+
+    // Esta ação limpa o histórico visível no navegador.
+    // Para reiniciar o contexto da IA no servidor,
+    // será necessária uma rota própria no backend.
+
+    let numeroConversa = 1;
+
+    botaoNovaConversa.addEventListener("click", () => {
+      lista.replaceChildren();
+
+      numeroConversa += 1;
+
+      tituloConversa.textContent = numeroConversa === 2
+        ? "Nova conversa"
+        : "Nova conversa " + (numeroConversa - 1);
+
+      painelPerfil.hidden = true;
+
+      botaoPerfil.setAttribute("aria-expanded", "false");
+
+      saudacao();
+
+      campo.value = "";
+      campo.focus();
+    });
+
+    // =========================================
+    // ENVIO DE MENSAGENS
+    // =========================================
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const texto = campo.value.trim();
+
+      if (!texto || botao.disabled) {
+        return;
       }
 
-    } catch (err) {
-      adicionar(
-        "Não foi possível falar com o servidor.",
-        "erro"
-      );
+      adicionar(texto, "usuario");
 
-    } finally {
-      botao.disabled = false;
-      campo.focus();
-    }
-  });
+      campo.value = "";
+      botao.disabled = true;
 
-  adicionar(
-    "Olá! Sou o assistente do Pet Delivery. (Passo 1: por enquanto só repito o que você diz.)",
-    "agente"
-  );
-</script>
+      try {
+        const resp = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: texto
+          })
+        });
+
+        // Sessão expirada: retorna à tela de login.
+        if (resp.status === 401) {
+          window.location.href = "/login";
+          return;
+        }
+
+        const dados = await resp.json().catch(() => ({}));
+
+        if (resp.ok) {
+          adicionar(
+            dados.reply ?? "O servidor não retornou uma resposta.",
+            "agente"
+          );
+        } else {
+          adicionar(
+            dados.error || "Erro inesperado.",
+            "erro"
+          );
+        }
+      } catch (err) {
+        adicionar(
+          "Não foi possível falar com o servidor.",
+          "erro"
+        );
+      } finally {
+        botao.disabled = false;
+        campo.focus();
+      }
+    });
+
+    // =========================================
+    // SAIR DA CONTA
+    // =========================================
+
+    botaoSair.addEventListener("click", async () => {
+      botaoSair.disabled = true;
+
+      try {
+        await fetch("/api/logout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: "{}"
+        });
+      } catch (err) {
+        // Redireciona mesmo em caso de falha de rede.
+      } finally {
+        window.location.href = "/login";
+      }
+    });
+
+    saudacao();
+  </script>
 
 </body>
 </html>
