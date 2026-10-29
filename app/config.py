@@ -9,7 +9,7 @@ class Config:
     """
     Configurações da aplicação, todas vindas de variáveis de ambiente.
     """
-    DEBUG = os.getenv("FLASK_DEBUG", "0") == 1
+    DEBUG = os.getenv("FLASK_DEBUG", "0") == "1"
     
     # Limite do tamanho da mensagem do usuario.
     MAX_MENSAGEM = 1000
