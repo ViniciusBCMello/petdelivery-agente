@@ -24,7 +24,7 @@ class Config:
     # Chave que ASSINA o cookie da sessão. Sem SECRET_KEY no .env, usa uma chave aleatório
     # a cada execução
     SECRET_KEY = os.getenv("SECRET_KEY") or secrets.token_hex(32)
-    SESSION_COOKIE_HYYPONLY = True            # o JavaScript da pagina não le o cookie
+    SESSION_COOKIE_HTTPONLY = True            # o JavaScript da pagina não le o cookie
     SESSION_COOKIE_SAMESITE = "Lax"           # o navegador não envia o cookie em requisições de outros sites
     SESSION_COOKIE_SECURE = False             # mude para True quando houver HTTPS
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
