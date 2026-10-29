@@ -2,7 +2,7 @@ import logging
 
 from flask import Blueprint, current_app, jsonify, make_response, redirect, render_template, request, session, url_for
 import mysql.connector
-from app.tools.auth import autenticar, bloqueado, limpar_falhas, login_obrigatorio_api, login_obrigatorio_pagina, registrar_falha
+from app.auth import autenticar, bloqueado, limpar_falhas, login_obrigatorio_api, login_obrigatorio_pagina, registrar_falha
 from app.db import get_connection
 
 bp = Blueprint("web", __name__)
@@ -17,7 +17,7 @@ def pagina_chat():
     """Entrega a tela do chat apenas para quem faz login."""
     primeiro_nome = session["nome"].split()[0]
     resposta = make_response(render_template("chat.html", nome=primeiro_nome))
-    resposta.headers["Cacha-Control"] = "no-storage"    # o botao "voltar" nao mostra o chat apos sair
+    resposta.headers["Cache-Control"] = "no-store"    # o botao "voltar" nao mostra o chat apos sair
     return resposta
     
 
@@ -68,7 +68,7 @@ def login():
     email = email.strip()
 
     if bloqueado(email):
-        return jsonify(error="Muitas tentativas. Aguarde alguns minutos e tente novamente.")
+        return jsonify(error="Muitas tentativas. Aguarde alguns minutos e tente novamente."), 429
     try:
         cliente = autenticar(email, senha)
     except mysql.connector.Error:
