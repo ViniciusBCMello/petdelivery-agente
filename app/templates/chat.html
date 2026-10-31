@@ -1294,6 +1294,13 @@
     botaoNovaConversa.addEventListener("click", () => {
       lista.replaceChildren();
 
+      // Se falhar, a tela já foi limpa; o servidor esquece sozinho quando a sessão acabar.
+      fetch("/api/chat/nova", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}"
+      }).catch(() => {});
+
       numeroConversa += 1;
 
       tituloConversa.textContent = numeroConversa === 2

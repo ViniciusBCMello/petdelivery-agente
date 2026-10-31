@@ -122,9 +122,8 @@ def test_chat_sem_login_e_recusado(http):
     assert r.status_code == 401 and "login" in r.get_json()["error"].lower()
 
 
-def test_chat_com_login_responde_e_valida_a_mensagem(http, cliente_demo):
+def test_chat_com_login_valida_a_mensagem(http, cliente_demo):
     entrar(http, cliente_demo["email"], SENHA_DEMO)
-    assert http.post("/api/chat", json={"message": "oi"}).get_json()["reply"].startswith("[eco]")
     assert http.post("/api/chat", json={"message": "   "}).status_code == 400
     assert http.post("/api/chat", json={"message": "a" * 1001}).status_code == 400
     assert http.post("/api/chat", data="oi").status_code == 415

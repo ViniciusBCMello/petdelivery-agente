@@ -1,9 +1,11 @@
 import logging
-
-from flask import Blueprint, current_app, jsonify, make_response, redirect, render_template, request, session, url_for
+import secrets
 import mysql.connector
+from flask import Blueprint, current_app, jsonify, make_response, redirect, render_template, request, session, url_for
 from app.auth import autenticar, bloqueado, limpar_falhas, login_obrigatorio_api, login_obrigatorio_pagina, registrar_falha
 from app.db import get_connection
+from app.agente.provedor import ErroProvedor
+from app.tools import Contexto
 
 bp = Blueprint("web", __name__)
 log = logging.getLogger("agente.web")
@@ -121,5 +123,47 @@ def chat():
     if len(mensagem) > limite:
         return jsonify(error=f"Mensagem acima de {limite} caracteres."), 400
 
-    return jsonify(reply=f"[eco] Voce disse: {mensagem}")
+    agente = current_app.extensions.get("agente")
+    if agente is None:
+        return jsonify(error="O assistente ainda não está configurado neste servidor.")
 
+    historico = current_app.extensions["historico"]
+    chave = _chave_da_conversa()
+    conn = None
+    try:
+        conn = get_connection()
+        contexto = Contexto(conn=conn, cliente_id=session["cliente_id"])
+        resultado = agente.responder(historico.obter(chave), mensagem, contexto)
+    except ErroProvedor as e:
+        return jsonify(error=e.mensagem_usuario), 503
+    except mysql.connector.Error:
+        log.exception("Falha no banco durante o chat.")
+        return jsonify(error="Serviço indisponível no momento. Tente novamente em instantes.")
+    except Exception:
+        log.exception("Erro inesperado no chat.")
+        return jsonify(error="Ocorreu um erro inesperado. Tente novamente."), 500
+    finally:
+        if conn is not None:
+            conn.close()
+
+    historico.registrar(chave, mensagem, resultado.resposta)
+    return jsonify(reply=resultado.resposta)
+
+
+@bp.post("/api/chat/nova")
+@login_obrigatorio_api
+def nova_conversa():
+    """Esquece o contexto da conversa atual (botão "Nova conversa")."""
+    if not request.is_json:
+        return jsonify(error="Requisição inválida."), 415
+    antiga = session.pop("conversa_id", None)
+    if antiga:
+        current_app.extensions["historico"].limpar(f"{session['cliente_id']}:{antiga}")
+    return jsonify(status="ok")
+
+
+def _chave_da_conversa() -> str:
+    """Identifica a conversa do cliente logado. O id fica no cookie assinado da sessão."""
+    if "conversa_id" not in session:
+        session["conversa_id"] = secrets.token_hex(16)
+    return f"{session['cliente_id']}:{session['conversa_id']}"
