@@ -3,7 +3,7 @@ Ferramentas reais e banco (desfeito no fim); só o LLM é de mentira."""
 import json
 
 import pytest
-from falsos import ProvedorFalso, chama, texto
+from test_falsos import ProvedorFalso, chama, texto
 
 from app import routes
 from app.agente.historico import Historico
