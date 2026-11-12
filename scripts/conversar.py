@@ -14,6 +14,7 @@ from app import create_app                                 # noqa: E402
 from app.agente.provedor import ErroProvedor, Mensagem     # noqa: E402
 from app.db import get_connection                          # noqa: E402
 from app.tools import Contexto                             # noqa: E402
+from app.tools.confirmacao import Confirmacoes             # noqa: E402
 
 
 def main():
@@ -31,11 +32,13 @@ def main():
     with app.app_context():
         conn = get_connection()
         try:
-            ctx = Contexto(conn=conn, cliente_id=cliente_id)
+            cofre = Confirmacoes()
+            ctx = Contexto(conn=conn, cliente_id=cliente_id, confirmacoes=cofre)
             while True:
                 msg = input("\nvocê> ").strip()
                 if not msg or msg.lower() == "sair":
                     break
+                ctx.turno = cofre.proximo_turno()
                 try:
                     r = agente.responder(historico, msg, ctx)
                 except ErroProvedor as e:

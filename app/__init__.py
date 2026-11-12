@@ -4,6 +4,7 @@ from .routes import bp
 from .agente.historico import Historico
 from .agente.orquestrador import Agente
 from .agente.provedor import criar_provedor
+from .tools.confirmacao import Confirmacoes
 
 
 def create_app():
@@ -19,6 +20,7 @@ def create_app():
         app.logger.warning("LLM_API_KEY ou LLM_MODEL ausente no .env: o chat não terá agente")
     app.extensions["agente"] = Agente(provedor, max_passos=app.config["AGENTE_MAX_PASSOS"]) if provedor else None
     app.extensions["historico"] = Historico(app.config["AGENTE_MAX_HISTORICO"])
+    app.extensions["confirmacoes"] = Confirmacoes()      # códigos de confirmação das ferramentas que gravam
 
     app.register_blueprint(bp)
     return app

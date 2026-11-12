@@ -34,6 +34,9 @@ class Contexto:
 
     conn: Any                       # Conexão aberta com o banco.
     cliente_id: int | None = None   # Vem da sessão (login), nunca de argumento do modelo.
+    confirmacoes: Any = None        # Cofre de código de confirmação.
+    turno: int = 0                  # Número da mensagem do cliente.
+
 
 
 @dataclass(frozen=True)

@@ -125,20 +125,21 @@ def chat():
 
     agente = current_app.extensions.get("agente")
     if agente is None:
-        return jsonify(error="O assistente ainda não está configurado neste servidor.")
+        return jsonify(error="O assistente ainda não está configurado neste servidor."), 503
 
     historico = current_app.extensions["historico"]
     chave = _chave_da_conversa()
     conn = None
     try:
         conn = get_connection()
-        contexto = Contexto(conn=conn, cliente_id=session["cliente_id"])
+        cofre = current_app.extensions["confirmacoes"]
+        contexto = Contexto(conn=conn, cliente_id=session["cliente_id"],confirmacoes=cofre, turno=cofre.proximo_turno())
         resultado = agente.responder(historico.obter(chave), mensagem, contexto)
     except ErroProvedor as e:
         return jsonify(error=e.mensagem_usuario), 503
     except mysql.connector.Error:
         log.exception("Falha no banco durante o chat.")
-        return jsonify(error="Serviço indisponível no momento. Tente novamente em instantes.")
+        return jsonify(error="Serviço indisponível no momento. Tente novamente em instantes."), 503
     except Exception:
         log.exception("Erro inesperado no chat.")
         return jsonify(error="Ocorreu um erro inesperado. Tente novamente."), 500

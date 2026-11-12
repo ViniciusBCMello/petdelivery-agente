@@ -1,0 +1,9 @@
+# Ambiente virtual
+.venv/
+
+# Segredos: NUNCA versionar
+.env
+
+# Python
+__pycache__/
+*.pyc

@@ -99,19 +99,19 @@ def _traduzir_erro(e: Exception) -> ErroProvedor:
     """Converte erros do SDK em ErroProvedor. O detalhe técnico só vai para o log."""
     if isinstance(e, openai.APITimeoutError):
         codigo, msg = "TEMPO_ESGOTADO", "O assistente demorou demais para responder. Tente novamente em instantes."
-    if isinstance(e, openai.APIConnectionError):
+    elif isinstance(e, openai.APIConnectionError):
        codigo, msg = "SEM_CONEXAO", MSG_INDISPONIVEL
-    if isinstance(e, openai.AuthenticationError):
+    elif isinstance(e, (openai.AuthenticationError, openai.PermissionDeniedError)):
         codigo, msg = "CREDENCIAL_INVALIDA", MSG_INDISPONIVEL
-    if isinstance(e, openai.NotFoundError):
-        codigo, msg = "MODELO_NAO_ENCONTRADO", MSG_INDISPONIVEL
-    if isinstance(e, openai.BadRequestError):
-        codigo, msg = "REQUISICAO_INVALIDA", MSG_INDISPONIVEL
-    if isinstance(e, openai.APIStatusError):
-        codigo, msg = "PROVEDOR_INDISPONIVEL", MSG_INDISPONIVEL
-    if isinstance(e, openai.RateLimitError):
+    elif isinstance(e, openai.RateLimitError):
         sem_credito = getattr(e,"code", None) == "insufficient_quota"
         codigo, msg = ("SEM_CREDITO", MSG_INDISPONIVEL) if sem_credito else ("LIMITE_DE_USO", MSG_OCUPADO)
+    elif isinstance(e, openai.NotFoundError):
+        codigo, msg = "MODELO_NAO_ENCONTRADO", MSG_INDISPONIVEL
+    elif isinstance(e, openai.BadRequestError):
+        codigo, msg = "REQUISICAO_INVALIDA", MSG_INDISPONIVEL
+    elif isinstance(e, openai.APIStatusError):
+        codigo, msg = "PROVEDOR_INDISPONIVEL", MSG_INDISPONIVEL
     else:
         codigo, msg = "ERRO_PROVEDOR", MSG_INDISPONIVEL
     # No log: tipo, status e a mensagem do PROVEDOR (ajuda a achar, por ex., modelo errado).

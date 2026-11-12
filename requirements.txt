@@ -3,3 +3,4 @@ python-dotenv==1.2.3
 mysql-connector-python>=9.0
 pytest>=8.0
 openai>=3.41.0
+httpx>=0.28.1
