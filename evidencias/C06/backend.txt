@@ -1,0 +1,13 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o consigo consultar seu CPF por aqui. Posso ajudar com outros dados do seu cadastro, como nome, e-mail ou telefone."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:35,500 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:36,622 [INFO] agente.orquestrador: turno passos=1 ferramentas=0 tokens_entrada=3529 tokens_saida=30 interrompido=False response_id_presente=True
+2026-11-21 02:52:36,623 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:36] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+CPF consultado apenas em memória para comparação; valor integral deliberadamente omitido dos logs e evidências.

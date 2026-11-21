@@ -203,3 +203,19 @@ def test_erro_do_provedor_no_meio_do_turno_tambem_sobe():
     ag, _ = agente([chama(("c", "listar_lojas", "{}")), ErroProvedor("SEM_CONEXAO", "caiu")])
     with pytest.raises(ErroProvedor):
         ag.responder([], "lojas", CTX)
+
+
+def test_respostas_anteriores_nao_sao_reenviadas_quando_ha_response_id():
+    ag, prov = agente([texto("Confirmação recebida.")])
+
+    historico = [Mensagem("user", "Quero agendar uma consulta."), Mensagem("assistant", "Você confirma? Código: ABC123"),]
+
+    ag.responder( historico, "Sim", CTX, previous_response_id="resp_anterior",)
+
+    assert prov.previous_response_ids == ["resp_anterior"]
+
+    mensagens = prov.iniciais[0]
+
+    assert len(mensagens) == 1
+    assert mensagens[0].papel == "user"
+    assert mensagens[0].texto.endswith("Sim")

@@ -134,7 +134,7 @@ def chat():
         conn = get_connection()
         cofre = current_app.extensions["confirmacoes"]
         contexto = Contexto(conn=conn, cliente_id=session["cliente_id"],confirmacoes=cofre, turno=cofre.proximo_turno())
-        resultado = agente.responder(historico.obter(chave), mensagem, contexto)
+        resultado = agente.responder(historico=historico.obter(chave),mensagem=mensagem,ctx=contexto,previous_response_id=historico.obter_response_id(chave),)
     except ErroProvedor as e:
         return jsonify(error=e.mensagem_usuario), 503
     except mysql.connector.Error:
@@ -147,7 +147,7 @@ def chat():
         if conn is not None:
             conn.close()
 
-    historico.registrar(chave, mensagem, resultado.resposta)
+    historico.registrar( chave, mensagem, resultado.resposta, response_id=resultado.response_id,)
     return jsonify(reply=resultado.resposta)
 
 

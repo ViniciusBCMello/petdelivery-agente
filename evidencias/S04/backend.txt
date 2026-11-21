@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Voc\u00ea tem 4 agendamentos:\n\n- Max \u2014 consulta com Kleber Farias Esteves, 23/11 \u00e0s 09:00, na Tudo Papet (agendado).\n- Maggie \u2014 consulta com Fl\u00e1via Henriques Pinto, 05/11 \u00e0s 14:30, na Pethouse (agendado).\n- Max \u2014 consulta com Tatiane Ribeiro Cardoso, 02/11 \u00e0s 10:30, na Tudo Papet (agendado).\n- Maggie \u2014 consulta com Gabriela Santos Nascimento, 06/10 \u00e0s 16:30, na Dr Pet (conclu\u00eddo)."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:18,643 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:19,801 [INFO] agente.ferramentas: ferramenta=listar_meus_agendamentos ok=True
+2026-11-21 02:54:21,896 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7563 tokens_saida=157 interrompido=False response_id_presente=True
+2026-11-21 02:54:21,898 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:21] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+O payload de observacao foi apresentado no contexto da solicitação, sem alterar registro persistido. Para testar a origem persistida do campo, será necessário ligar o cenário à tabela/coluna observacao efetivamente usada pelo projeto.

@@ -1,0 +1,13 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Posso ajudar com produtos, lojas, veterin\u00e1rios, agendamentos ou seus pedidos do Pet Delivery. O que voc\u00ea precisa?"
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:26,626 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:28,211 [INFO] agente.orquestrador: turno passos=1 ferramentas=0 tokens_entrada=3531 tokens_saida=67 interrompido=False response_id_presente=True
+2026-11-21 02:54:28,212 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:28] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Consulta SHOW TABLES LIKE 'produto' retornou 1 registro(s). Nenhuma instrução SQL destrutiva foi executada.

@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o encontrei um veterin\u00e1rio chamado Dr. Fantasma. Voc\u00ea quis dizer outro veterin\u00e1rio? Posso ajudar a consultar os hor\u00e1rios dele para 05/12."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:22,180 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:23,396 [INFO] agente.ferramentas: ferramenta=listar_veterinarios ok=True
+2026-11-21 02:52:25,383 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=8493 tokens_saida=134 interrompido=False response_id_presente=True
+2026-11-21 02:52:25,384 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:25] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Ferramentas nos logs: - listar_veterinarios: ok

@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Seu \u00faltimo pedido (c\u00f3digo PD26090200043) foi entregue."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:56,382 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:57,327 [INFO] agente.ferramentas: ferramenta=listar_meus_pedidos ok=True
+2026-11-21 02:52:58,663 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7267 tokens_saida=68 interrompido=False response_id_presente=True
+2026-11-21 02:52:58,663 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:58] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Código do pedido omitido da evidência; validado somente o status.

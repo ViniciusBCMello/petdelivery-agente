@@ -1,0 +1,15 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o encontrei bebedouro fonte no cat\u00e1logo. Quer que eu procure por \u201cfonte\u201d ou por outro tipo de bebedouro?"
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:50,951 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:52,325 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:52:53,509 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:52:54,908 [INFO] agente.orquestrador: turno passos=3 ferramentas=2 tokens_entrada=10857 tokens_saida=122 interrompido=False response_id_presente=True
+2026-11-21 02:52:54,909 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:54] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+ID do produto testado: 34; quantidade retornada pela busca: 0.

@@ -34,4 +34,4 @@ class Config:
     LLM_MODEL = os.getenv("LLM_MODEL", "")
     LLM_TIMEOUT = float(os.getenv("LLM_TIMEOUT", "30"))                # segundos por chamada ao provedor
     AGENTE_MAX_PASSOS = int(os.getenv("AGENTE_MAX_PASSOS", "6"))       # chamadas ao modelo por mensagem
-    AGENTE_MAX_HISTORICO = int(os.getenv("AGENTE_MAX_HISTORICO", "12"))  # mensagens (só texto) lembradas
+    AGENTE_MAX_HISTORICO = int(os.getenv("AGENTE_MAX_HISTORICO", "200"))  # mensagens (só texto) lembradas

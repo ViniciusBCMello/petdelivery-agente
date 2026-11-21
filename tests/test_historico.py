@@ -57,3 +57,23 @@ def test_limpar_esquece_so_aquela_conversa():
     h.limpar("a")
     h.limpar("nao-existe")                  # não levanta erro
     assert h.obter("a") == [] and len(h.obter("b")) == 2
+
+def test_armazena_e_atualiza_response_id():
+    h = Historico()
+
+    h.registrar("a", "oi", "olá", response_id="resp_001")
+
+    assert h.obter_response_id("a") == "resp_001"
+
+    h.registrar("a", "sim", "confirmado", response_id="resp_002")
+
+    assert h.obter_response_id("a") == "resp_002"
+
+
+def test_limpar_remove_response_id():
+    h = Historico()
+
+    h.registrar("a", "oi", "olá", response_id="resp_001")
+    h.limpar("a")
+
+    assert h.obter_response_id("a") is None

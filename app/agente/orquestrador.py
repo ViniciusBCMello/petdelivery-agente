@@ -42,6 +42,7 @@ class Resultado:
     uso: Uso = field(default_factory=Uso)
     passos: int = 0                  # quantas vezes o modelo foi chamado
     interrompido: bool = False       # True se parou por limite de passos
+    response_id: str | None = None
 
 
 def _erro(codigo: str, mensagem: str) -> dict:
@@ -57,31 +58,92 @@ class Agente:
         self._executor = executor
         self._agora = agora
 
-    def responder(self, historico: list[Mensagem], mensagem: str, ctx) -> Resultado:
-        """Devolve a resposta ao cliente. ctx (conexão + cliente logado) vem da aplicação."""
+    def responder(
+        self,
+        historico: list[Mensagem],
+        mensagem: str,
+        ctx,
+        previous_response_id: str | None = None,
+    ) -> Resultado:
+        """Devolve a resposta ao cliente preservando a continuidade da Responses API."""
+    
         pergunta = bloco_de_contexto(self._agora()) + mensagem
-        turno = self._provedor.abrir_turno(INSTRUCOES, especificacoes())
+    
+        turno = self._provedor.abrir_turno(
+            INSTRUCOES,
+            especificacoes(),
+            previous_response_id=previous_response_id,
+        )
+    
         resultado = Resultado(resposta="")
-
-        resposta = turno.iniciar(list(historico) + [Mensagem("user", pergunta)])
+    
+        # Se existe uma resposta anterior, ela já contém o histórico completo
+        # da cadeia. Enviamos somente a nova mensagem do usuário.
+        if previous_response_id:
+            mensagens = [Mensagem("user", pergunta)]
+    
+            log.info(
+                "iniciando conversa encadeada | previous_response_id_presente=True"
+            )
+    
+        else:
+            # Fallback para histórico textual quando não existe ID anterior.
+            mensagens = list(historico) + [Mensagem("user", pergunta)]
+    
+            log.info(
+                "iniciando conversa pelo histórico textual | "
+                "previous_response_id_presente=False"
+            )
+    
+        resposta = turno.iniciar(mensagens)
+    
         while True:
             resultado.passos += 1
             resultado.uso.somar(resposta.uso)
-
-            if not resposta.chamadas:                       # sem ferramenta: é a resposta final
-                resultado.resposta = resposta.texto.strip() or MSG_SEM_RESPOSTA
+    
+            if not resposta.chamadas:
+                # Resposta final: guarda o ID da última resposta da API.
+                resultado.resposta = (
+                    resposta.texto.strip() or MSG_SEM_RESPOSTA
+                )
+    
+                resultado.response_id = resposta.response_id
+    
                 break
-            if resultado.passos >= self._max_passos:        # ainda quer ferramenta, mas acabou o limite
-                log.warning("turno interrompido: limite de %d passos", self._max_passos)
-                resultado.resposta, resultado.interrompido = MSG_LIMITE, True
+            
+            if resultado.passos >= self._max_passos:
+                log.warning(
+                    "turno interrompido: limite de %d passos",
+                    self._max_passos,
+                )
+    
+                resultado.resposta = MSG_LIMITE
+                resultado.interrompido = True
+    
+                # Não persiste uma cadeia que terminou com chamadas pendentes.
+                resultado.response_id = None
+    
                 break
-
-            envios = [self._executar_uma(c, ctx, resultado) for c in resposta.chamadas]
+            
+            envios = [
+                self._executar_uma(c, ctx, resultado)
+                for c in resposta.chamadas
+            ]
+    
+            # Continua a cadeia interna de chamadas de ferramentas.
             resposta = turno.continuar(envios)
-
-        log.info("turno passos=%d ferramentas=%d tokens_entrada=%d tokens_saida=%d interrompido=%s",
-                 resultado.passos, len(resultado.chamadas), resultado.uso.entrada,
-                 resultado.uso.saida, resultado.interrompido)
+    
+        log.info(
+            "turno passos=%d ferramentas=%d tokens_entrada=%d "
+            "tokens_saida=%d interrompido=%s response_id_presente=%s",
+            resultado.passos,
+            len(resultado.chamadas),
+            resultado.uso.entrada,
+            resultado.uso.saida,
+            resultado.interrompido,
+            resultado.response_id is not None,
+        )
+    
         return resultado
 
     def _executar_uma(self, chamada, ctx, resultado: Resultado) -> ResultadoFerramenta:

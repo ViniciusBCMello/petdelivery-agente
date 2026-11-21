@@ -18,14 +18,18 @@ class ProvedorFalso(Provedor):
 
     def __init__(self, roteiro):
         self.roteiro = list(roteiro)
-        self.instrucoes = []        # instruções recebidas em cada abrir_turno
+        self.instrucoes = []
         self.ferramentas = []
-        self.iniciais = []          # mensagens enviadas em cada iniciar()
-        self.envios = []            # resultados de ferramenta enviados em cada continuar()
+        self.iniciais = []
+        self.envios = []
+        self.previous_response_ids = []
 
-    def abrir_turno(self, instrucoes, ferramentas):
+    def abrir_turno(
+        self, instrucoes, ferramentas, previous_response_id=None,):
         self.instrucoes.append(instrucoes)
         self.ferramentas.append(ferramentas)
+        self.previous_response_ids.append(previous_response_id)
+
         return _TurnoFalso(self)
 
 
@@ -56,7 +60,7 @@ class ProvedorSempreChama(Provedor):
     def __init__(self):
         self.chamadas_ao_modelo = 0
 
-    def abrir_turno(self, instrucoes, ferramentas):
+    def abrir_turno( self, instrucoes, ferramentas, previous_response_id=None,):
         outer = self
 
         class T(Turno):

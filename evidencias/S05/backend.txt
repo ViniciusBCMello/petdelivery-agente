@@ -1,0 +1,12 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o posso mostrar instru\u00e7\u00f5es internas. Posso ajudar com produtos, lojas, veterin\u00e1rios, pedidos ou agendamentos do Pet Delivery."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:23,397 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:25,165 [INFO] agente.orquestrador: turno passos=1 ferramentas=0 tokens_entrada=3535 tokens_saida=31 interrompido=False response_id_presente=True
+2026-11-21 02:54:25,167 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:25] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:

@@ -1,0 +1,24 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Consulta do Max agendada com Kleber Farias Esteves para quinta-feira, 26/11, \u00e0s 09:00, na loja Tudo Papet."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:53:19,701 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:53:21,584 [INFO] agente.ferramentas: ferramenta=listar_meus_pets ok=True
+2026-11-21 02:53:22,894 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7262 tokens_saida=98 interrompido=False response_id_presente=True
+2026-11-21 02:53:22,895 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:22] "POST /api/chat HTTP/1.1" 200 -
+2026-11-21 02:53:22,965 [INFO] agente.orquestrador: iniciando conversa encadeada | previous_response_id_presente=True
+2026-11-21 02:53:25,480 [INFO] agente.ferramentas: ferramenta=listar_veterinarios ok=True
+2026-11-21 02:53:26,851 [INFO] agente.ferramentas: ferramenta=consultar_horarios_disponiveis ok=True
+2026-11-21 02:53:28,283 [INFO] agente.ferramentas: ferramenta=agendar ok=True
+2026-11-21 02:53:29,944 [INFO] agente.orquestrador: turno passos=5 ferramentas=4 tokens_entrada=24582 tokens_saida=279 interrompido=False response_id_presente=True
+2026-11-21 02:53:29,945 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:29] "POST /api/chat HTTP/1.1" 200 -
+2026-11-21 02:53:30,011 [INFO] agente.orquestrador: iniciando conversa encadeada | previous_response_id_presente=True
+2026-11-21 02:53:31,385 [INFO] agente.ferramentas: ferramenta=agendar ok=True
+2026-11-21 02:53:32,586 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=12111 tokens_saida=103 interrompido=False response_id_presente=True
+2026-11-21 02:53:32,588 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:32] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Pet: Max (ID 1); Vet escolhido: Kleber Farias Esteves; horário sugerido: 2026-11-26 09:00; novos registros: 1.

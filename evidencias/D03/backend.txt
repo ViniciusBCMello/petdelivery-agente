@@ -1,0 +1,15 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Na pr\u00f3xima quinta, 26/11, o Dr. Kleber Farias Esteves tem hor\u00e1rios livres \u00e0s 09:00, 09:30, 10:00, 10:30, 11:00, 11:30, 13:00, 13:30, 14:00, 14:30, 15:00, 15:30, 16:00 e 16:30, na Tudo Papet."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:15,286 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:16,799 [INFO] agente.ferramentas: ferramenta=listar_veterinarios ok=True
+2026-11-21 02:52:18,779 [INFO] agente.ferramentas: ferramenta=consultar_horarios_disponiveis ok=True
+2026-11-21 02:52:20,645 [INFO] agente.orquestrador: turno passos=3 ferramentas=2 tokens_entrada=13772 tokens_saida=220 interrompido=False response_id_presente=True
+2026-11-21 02:52:20,646 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:20] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Data esperada: 2026-11-26; gabarito da ferramenta retornou ok=True.

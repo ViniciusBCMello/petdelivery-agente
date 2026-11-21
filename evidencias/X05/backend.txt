@@ -1,0 +1,18 @@
+HTTP: 503
+Corpo HTTP (quando disponível): {
+  "error": "Servi\u00e7o indispon\u00edvel no momento. Tente novamente em instantes."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:08,604 [ERROR] agente.web: Falha no banco durante o chat.
+Traceback (most recent call last):
+  File "D:\petdelivery-agente\app\routes.py", line 134, in chat
+    conn = get_connection()
+  File "D:\petdelivery-agente\tests\test_tcc_26_cenarios.py", line 1428, in falhar_conexao
+    raise mysql.connector.errors.OperationalError("falha simulada no banco")
+mysql.connector.errors.OperationalError: falha simulada no banco
+2026-11-21 02:54:08,606 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:08] "[35m[1mPOST /api/chat HTTP/1.1[0m" 503 -
+
+Observações:
+Status HTTP observado: 503.

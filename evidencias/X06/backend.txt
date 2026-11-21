@@ -1,0 +1,12 @@
+HTTP: 503
+Corpo HTTP (quando disponível): {
+  "error": "O assistente est\u00e1 com muitas solicita\u00e7\u00f5es agora. Tente novamente em instantes."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:10,100 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:10,101 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:10] "[35m[1mPOST /api/chat HTTP/1.1[0m" 503 -
+
+Observações:
+Provedor substituído temporariamente neste cenário por um provedor de falha controlada. Os demais cenários usam o provedor real.

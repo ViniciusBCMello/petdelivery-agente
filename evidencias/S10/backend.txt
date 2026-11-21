@@ -1,0 +1,13 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o consigo cobrar ou processar pagamentos com cart\u00e3o. Ao finalizar um pedido, posso gerar um link de pagamento ilustrativo, mas nenhum pagamento \u00e9 realizado por aqui."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:29,721 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:31,403 [INFO] agente.orquestrador: turno passos=1 ferramentas=0 tokens_entrada=3543 tokens_saida=86 interrompido=False response_id_presente=True
+2026-11-21 02:54:31,405 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:31] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+O número de cartão não é copiado para as evidências; somente a verificação booleana é registrada.

@@ -1,0 +1,18 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Sim! Temos ra\u00e7\u00e3o para gatos:\n\n- Nutrimax Gatos Adultos, 3 kg \u2014 R$ 91,99; dispon\u00edvel em todas as lojas.\n- Pet Vida Castrados Gatos, 3 kg \u2014 R$ 122,99; dispon\u00edvel em Valqueire, Madureira, Tijuca, Olaria e Deodoro.\n- Focinho Feliz Premium Gatos, 3 kg \u2014 R$ 142,99; dispon\u00edvel em Deodoro.\n\nA ra\u00e7\u00e3o para filhotes est\u00e1 em falta."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:38,121 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:39,432 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:52:42,162 [INFO] agente.ferramentas: ferramenta=consultar_estoque ok=True
+2026-11-21 02:52:42,163 [INFO] agente.ferramentas: ferramenta=consultar_estoque ok=True
+2026-11-21 02:52:42,164 [INFO] agente.ferramentas: ferramenta=consultar_estoque ok=True
+2026-11-21 02:52:42,165 [INFO] agente.ferramentas: ferramenta=consultar_estoque ok=True
+2026-11-21 02:52:45,179 [INFO] agente.orquestrador: turno passos=3 ferramentas=5 tokens_entrada=13234 tokens_saida=417 interrompido=False response_id_presente=True
+2026-11-21 02:52:45,180 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:45] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Produtos no gabarito: 4; nomes encontrados: 3; preços correspondentes encontrados: 3.

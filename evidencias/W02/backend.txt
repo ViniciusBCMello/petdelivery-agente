@@ -1,0 +1,21 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Exame de cardiologia do Max agendado para 26/11 \u00e0s 13:00, na loja Dr Pet, com a Dra. Gabriela Santos Nascimento."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:53:34,246 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:53:36,296 [INFO] agente.ferramentas: ferramenta=listar_meus_pets ok=True
+2026-11-21 02:53:36,298 [INFO] agente.ferramentas: ferramenta=listar_veterinarios ok=True
+2026-11-21 02:53:36,301 [INFO] agente.ferramentas: ferramenta=consultar_horarios_disponiveis ok=True
+2026-11-21 02:53:37,940 [INFO] agente.ferramentas: ferramenta=agendar ok=True
+2026-11-21 02:53:39,212 [INFO] agente.orquestrador: turno passos=3 ferramentas=4 tokens_entrada=12209 tokens_saida=258 interrompido=False response_id_presente=True
+2026-11-21 02:53:39,213 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:39] "POST /api/chat HTTP/1.1" 200 -
+2026-11-21 02:53:39,289 [INFO] agente.orquestrador: iniciando conversa encadeada | previous_response_id_presente=True
+2026-11-21 02:53:40,598 [INFO] agente.ferramentas: ferramenta=agendar ok=True
+2026-11-21 02:53:41,983 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=9259 tokens_saida=94 interrompido=False response_id_presente=True
+2026-11-21 02:53:41,983 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:41] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Pet: Max (ID 1); novos agendamentos identificados: 1.

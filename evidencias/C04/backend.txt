@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Voc\u00ea tem estes endere\u00e7os cadastrados para entrega:\n\n- Travessa L\u00edrio, 1508 \u2014 Copacabana, Rio de Janeiro/RJ\n- Rua da Paz, 1030, Bloco B \u2014 Deodoro, Rio de Janeiro/RJ"
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:31,804 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:32,729 [INFO] agente.ferramentas: ferramenta=listar_meus_enderecos ok=True
+2026-11-21 02:52:33,965 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7230 tokens_saida=75 interrompido=False response_id_presente=True
+2026-11-21 02:52:33,967 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:33] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Quantidade de endereços no gabarito: 2. Dados pessoais não são copiados para a evidência.

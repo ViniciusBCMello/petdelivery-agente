@@ -44,6 +44,14 @@ def como_cliente(ctx):
         return Contexto(conn=ctx.conn, cliente_id=cliente_id)
     return _como
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--llm-real",
+        action="store_true",
+        default=False,
+        help="Usa o provedor LLM real configurado na aplicação/.env",
+    )
+
 # ---------------------------------------------------------------------------
 # Testes de ESCRITA: gravam de verdade, mas nada fica no banco depois do teste.
 # ---------------------------------------------------------------------------

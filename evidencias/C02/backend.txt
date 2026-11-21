@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "Voc\u00ea tem um pr\u00f3ximo agendamento:\n\n- Consulta para o Max, dia 23/11 \u00e0s 09:00, com Kleber Farias Esteves, na loja Tudo Papet."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:26,905 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:28,583 [INFO] agente.ferramentas: ferramenta=listar_meus_agendamentos ok=True
+2026-11-21 02:52:30,331 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7230 tokens_saida=68 interrompido=False response_id_presente=True
+2026-11-21 02:52:30,332 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:30] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Quantidade de agendamentos futuros no gabarito: 1.

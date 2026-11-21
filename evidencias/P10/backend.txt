@@ -1,0 +1,18 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o consegui finalizar porque seu carrinho est\u00e1 vazio. Se quiser, posso ajudar a encontrar produtos e adicion\u00e1-los ao carrinho."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:53:12,496 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:53:13,868 [INFO] agente.ferramentas: ferramenta=listar_meus_enderecos ok=True
+2026-11-21 02:53:15,614 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7271 tokens_saida=144 interrompido=False response_id_presente=True
+2026-11-21 02:53:15,614 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:15] "POST /api/chat HTTP/1.1" 200 -
+2026-11-21 02:53:15,685 [INFO] agente.orquestrador: iniciando conversa encadeada | previous_response_id_presente=True
+2026-11-21 02:53:16,882 [INFO] agente.ferramentas: ferramenta=finalizar_pedido ok=False codigo=CARRINHO_VAZIO
+2026-11-21 02:53:18,128 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7821 tokens_saida=70 interrompido=False response_id_presente=True
+2026-11-21 02:53:18,131 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:18] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Pedidos antes: 2; pedidos depois: 2.

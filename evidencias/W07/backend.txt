@@ -1,0 +1,19 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "A consulta do Max com o Dr. Kleber Farias Esteves, em 26/11 \u00e0s 09:00, foi cancelada."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:54:00,628 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:54:01,933 [INFO] agente.ferramentas: ferramenta=listar_meus_agendamentos ok=True
+2026-11-21 02:54:03,242 [INFO] agente.ferramentas: ferramenta=cancelar_agendamento ok=True
+2026-11-21 02:54:04,441 [INFO] agente.orquestrador: turno passos=3 ferramentas=2 tokens_entrada=11478 tokens_saida=130 interrompido=False response_id_presente=True
+2026-11-21 02:54:04,442 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:04] "POST /api/chat HTTP/1.1" 200 -
+2026-11-21 02:54:04,511 [INFO] agente.orquestrador: iniciando conversa encadeada | previous_response_id_presente=True
+2026-11-21 02:54:05,985 [INFO] agente.ferramentas: ferramenta=cancelar_agendamento ok=True
+2026-11-21 02:54:07,107 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=8440 tokens_saida=64 interrompido=False response_id_presente=True
+2026-11-21 02:54:07,108 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:54:07] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Pet: Max (ID 1); Agendamento criado pelo teste: 376; ID removido ao final.

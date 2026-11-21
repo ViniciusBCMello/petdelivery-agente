@@ -1,0 +1,15 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o consigo colocar os dois no mesmo pedido se forem de lojas diferentes: cada carrinho atende uma loja s\u00f3.\n\nEncontrei Royal Canin Filhote (10 kg) e Gran Plus Choice Adulto (15 kg). Qual loja \u00fanica voc\u00ea prefere para o pedido? A\u00ed verifico se os dois t\u00eam estoque nela."
+}
+
+
+Logs da aplicação:
+2026-11-21 02:53:00,231 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:53:02,052 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:53:02,053 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:53:06,484 [INFO] agente.orquestrador: turno passos=2 ferramentas=2 tokens_entrada=7445 tokens_saida=489 interrompido=False response_id_presente=True
+2026-11-21 02:53:06,485 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:53:06] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Lojas-alvo: Tudo Papet e Dr Pet; chamadas adicionar_ao_carrinho: 0; carrinhos após a tentativa: 0.

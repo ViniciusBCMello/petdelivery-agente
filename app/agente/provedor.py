@@ -62,6 +62,7 @@ class RespostaModelo:
     texto: str
     chamadas: tuple[ChamadaFerramenta, ...]
     uso: Uso
+    response_id: str | None = None
 
 
 class ErroProvedor(Exception):
@@ -84,7 +85,12 @@ class Turno:
 
 
 class Provedor:
-    def abrir_turno(self, instrucoes: str, ferramentas: list[dict]) -> Turno:
+    def abrir_turno(
+        self,
+        instrucoes: str,
+        ferramentas: list[dict],
+        previous_response_id: str | None = None,
+    ) -> Turno:
         raise NotImplementedError
 
 
@@ -132,11 +138,19 @@ def _uso_de(resposta) -> Uso:
 
 
 class _TurnoOpenAI(Turno):
-    def __init__(self, provedor: "ProvedorOpenAI", instrucoes: str, ferramentas: list[dict]):
+    def __init__(
+        self,
+        provedor: "ProvedorOpenAI",
+        instrucoes: str,
+        ferramentas: list[dict],
+        previous_response_id: str | None = None,
+    ):
         self._p = provedor
         self._instrucoes = instrucoes
         self._ferramentas = ferramentas
-        self._ultimo_id = None      # a Responses API encadeia as chamadas do turno por este id
+
+        # Continua a conversa anterior, quando existir.
+        self._ultimo_id = previous_response_id
 
     def iniciar(self, mensagens: list[Mensagem]) -> RespostaModelo:
         entrada = [{"role": m.papel, "content": m.texto} for m in mensagens]
@@ -154,6 +168,7 @@ class _TurnoOpenAI(Turno):
             input=entrada,
             tools=self._ferramentas,
             max_output_tokens=MAX_SAIDA,
+            store=True,
         )
         if self._ultimo_id:
             pedido["previous_response_id"] = self._ultimo_id
@@ -169,7 +184,7 @@ class _TurnoOpenAI(Turno):
         if resp.status == "incomplete" and not chamadas and not texto.strip():
             log.warning("resposta incompleta: %s", getattr(resp.incomplete_details, "reason", None))
             raise ErroProvedor("RESPOSTA_INCOMPLETA", MSG_INDISPONIVEL)
-        return RespostaModelo(texto=texto, chamadas=chamadas, uso=_uso_de(resp))
+        return RespostaModelo(texto=texto, chamadas=chamadas,uso=_uso_de(resp),response_id=resp.id,)
 
 
 class ProvedorOpenAI(Provedor):
@@ -178,11 +193,11 @@ class ProvedorOpenAI(Provedor):
         self._cliente = cliente or openai.OpenAI(api_key=api_key, timeout=timeout, max_retries=2)
         self._modelo = modelo
 
-    def abrir_turno(self, instrucoes: str, ferramentas: list[dict]) -> Turno:
+    def abrir_turno(self, instrucoes: str, ferramentas: list[dict],  previous_response_id: str | None = None,) -> Turno:
         # Nossas especificações são (nome, descrição, parâmetros); a OpenAI quer a forma "achatada".
         tools = [{"type": "function", "name": f["name"], "description": f["description"],
                   "parameters": f["parameters"], "strict": False} for f in ferramentas]
-        return _TurnoOpenAI(self, instrucoes, tools)
+        return _TurnoOpenAI(self, instrucoes, tools, previous_response_id=previous_response_id)
 
 
 def criar_provedor(cfg) -> Provedor | None:

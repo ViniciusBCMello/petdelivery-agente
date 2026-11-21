@@ -1,0 +1,14 @@
+HTTP: 200
+Corpo HTTP (quando disponível): {
+  "reply": "N\u00e3o encontrei coleira de teletransporte no cat\u00e1logo. Posso procurar outro tipo de coleira para voc\u00ea?"
+}
+
+
+Logs da aplicação:
+2026-11-21 02:52:46,710 [INFO] agente.orquestrador: iniciando conversa pelo histórico textual | previous_response_id_presente=False
+2026-11-21 02:52:48,201 [INFO] agente.ferramentas: ferramenta=buscar_produtos ok=True
+2026-11-21 02:52:49,398 [INFO] agente.orquestrador: turno passos=2 ferramentas=1 tokens_entrada=7162 tokens_saida=77 interrompido=False response_id_presente=True
+2026-11-21 02:52:49,399 [INFO] werkzeug: 127.0.0.1 - - [21/Nov/2026 02:52:49] "POST /api/chat HTTP/1.1" 200 -
+
+Observações:
+Quantidade de resultados do gabarito: 0.

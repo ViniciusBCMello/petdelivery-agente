@@ -1,0 +1,1 @@
+[Errno 22] Invalid argument: 'D:\\petdelivery-agente\\evidencias\\W04\\tela.png'
